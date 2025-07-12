@@ -1,0 +1,19 @@
+namespace DoeMais.Models;
+
+public class User
+{
+    public Int64 UserId { get; set; }
+    public string Name { get; set; } = null!;
+    public string Surname { get; set; } = "";
+    public string Email { get; set; } = default!;
+    public string Phone { get; set; } = "";
+    public string Cpf { get; set; } = "";
+    public string Address { get; set; } = "";
+    public string? Complement { get; set; }
+    public string Neighborhood { get; set; } = "";
+    public string City { get; set; } = "";
+    public string State { get; set; } = "";
+    public string ZipCode { get; set; } = "";
+    public string PasswordHash { get; set; }
+    public string Role { get; set; } = "Donor";
+}
