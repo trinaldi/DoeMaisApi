@@ -3,8 +3,8 @@ namespace DoeMais.Models;
 public class User
 {
     public Int64 UserId { get; set; }
-    public string Name { get; set; } = null!;
-    public string Surname { get; set; } = "";
+    public string? AvatarUrl { get; set; }
+    public string Name { get; set; } = "";
     public string Email { get; set; } = default!;
     public string Phone { get; set; } = "";
     public string Cpf { get; set; } = "";
