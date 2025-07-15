@@ -2,15 +2,16 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using DoeMais.Models;
+using DoeMais.Services.Interfaces.Utils;
 using Microsoft.IdentityModel.Tokens;
 
-namespace DoeMais.Services;
+namespace DoeMais.Services.Utils;
 
-public class AuthService
+public class TokenGeneratorService : ITokenGenerator
 {
     private readonly IConfiguration _config;
 
-    public AuthService(IConfiguration config)
+    public TokenGeneratorService(IConfiguration config)
     {
         _config = config;
     }
@@ -29,7 +30,7 @@ public class AuthService
 
         var token = new JwtSecurityToken(
             _config["Jwt:Issuer"],
-            _config["Jwt:Issuer"],
+            _config["Jwt:Audience"],
             claims,
             expires: DateTime.UtcNow.AddHours(3),
             signingCredentials: credentials

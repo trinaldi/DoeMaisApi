@@ -3,8 +3,9 @@ using DoeMais.Models;
 using DoeMais.Data;
 using DoeMais.DTOs;
 using DoeMais.Extensions;
-using DoeMais.Services;
+using DoeMais.Services.Utils;
 using DoeMais.Services.Interfaces;
+using DoeMais.Services.Interfaces.Utils;
 using Microsoft.EntityFrameworkCore;
 
 namespace DoeMais.Controllers;
@@ -14,13 +15,13 @@ namespace DoeMais.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly AppDbContext _context;
-    private readonly AuthService _authService;
+    private readonly TokenGeneratorService _tokenGeneratorService;
     private readonly IPasswordHasher _passwordHasher;
 
-    public AuthController(AppDbContext context, AuthService authService, IPasswordHasher passwordHasher)
+    public AuthController(AppDbContext context, TokenGeneratorService tokenGeneratorService, IPasswordHasher passwordHasher)
     {
         _context = context;
-        _authService = authService;
+        _tokenGeneratorService = tokenGeneratorService;
         _passwordHasher = passwordHasher;
     }
 
@@ -45,7 +46,7 @@ public class AuthController : ControllerBase
         if (user == null || !_passwordHasher.VerifyHashedPassword(dto.Password, user.PasswordHash))
             return Unauthorized("Credenciais inválidas");
 
-        var token = _authService.GenerateToken(user);
+        var token = _tokenGeneratorService.GenerateToken(user);
         return Ok(new { token });
     }
 }

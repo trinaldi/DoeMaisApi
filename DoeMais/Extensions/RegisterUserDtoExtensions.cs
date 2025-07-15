@@ -1,6 +1,6 @@
 using DoeMais.DTOs;
 using DoeMais.Models;
-using DoeMais.Services.Interfaces;
+using DoeMais.Services.Interfaces.Utils;
 
 namespace DoeMais.Extensions;
 

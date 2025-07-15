@@ -1,4 +1,4 @@
-namespace DoeMais.Services.Interfaces;
+namespace DoeMais.Services.Interfaces.Utils;
 
 public interface IPasswordHasher
 {
