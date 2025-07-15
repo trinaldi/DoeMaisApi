@@ -1,8 +1,6 @@
 # DoeMais
 
-> Uma plataforma para conectar doadores de itens (roupas, móveis, eletrodomésticos, etc.) com ONGs e pessoas em situação de vulnerabilidade.
-
----
+Uma plataforma para conectar doadores de itens (roupas, móveis, eletrodomésticos, etc.) com ONGs e pessoas em situação de vulnerabilidade.
 
 ## Visão Geral
 
