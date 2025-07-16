@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using DoeMais.Data;
-using DoeMais.DTOs;
+using DoeMais.DTO.Auth;
 using DoeMais.Extensions;
 using DoeMais.Services.Utils;
 using DoeMais.Services.Interfaces.Utils;
