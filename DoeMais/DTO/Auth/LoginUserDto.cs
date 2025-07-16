@@ -1,4 +1,4 @@
-namespace DoeMais.DTOs;
+namespace DoeMais.DTO.Auth;
 
 public class LoginUserDto
 {
