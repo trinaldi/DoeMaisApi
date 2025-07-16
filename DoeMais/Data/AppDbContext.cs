@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using DoeMais.Models;
+using DoeMais.Domain.User;
 
 namespace DoeMais.Data;
 

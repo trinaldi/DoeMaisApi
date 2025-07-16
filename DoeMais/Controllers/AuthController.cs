@@ -1,10 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using DoeMais.Models;
 using DoeMais.Data;
 using DoeMais.DTOs;
 using DoeMais.Extensions;
 using DoeMais.Services.Utils;
-using DoeMais.Services.Interfaces;
 using DoeMais.Services.Interfaces.Utils;
 using Microsoft.EntityFrameworkCore;
 

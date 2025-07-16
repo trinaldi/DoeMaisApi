@@ -1,7 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using DoeMais.Models;
+using DoeMais.Domain.User;
 using DoeMais.Services.Interfaces.Utils;
 using Microsoft.IdentityModel.Tokens;
 

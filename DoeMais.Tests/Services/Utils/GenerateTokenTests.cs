@@ -1,5 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
-using DoeMais.Models;
+using DoeMais.Domain.User;
 using DoeMais.Services.Interfaces.Utils;
 using DoeMais.Services.Utils;
 using Microsoft.Extensions.Configuration;

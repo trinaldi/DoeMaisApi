@@ -1,5 +1,5 @@
 using DoeMais.DTOs;
-using DoeMais.Models;
+using DoeMais.Domain.User;
 using DoeMais.Services.Interfaces.Utils;
 
 namespace DoeMais.Extensions;

@@ -1,4 +1,4 @@
-namespace DoeMais.Models;
+namespace DoeMais.Domain.User;
 
 public class User
 {
@@ -14,6 +14,6 @@ public class User
     public string City { get; set; } = "";
     public string State { get; set; } = "";
     public string ZipCode { get; set; } = "";
-    public string PasswordHash { get; set; }
+    public string PasswordHash { get; set; } = default!;
     public string Role { get; set; } = "Donor";
 }
