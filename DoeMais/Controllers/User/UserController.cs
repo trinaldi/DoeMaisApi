@@ -1,9 +1,9 @@
-using DoeMais.Data;
 using DoeMais.DTO.User;
+using DoeMais.Exceptions;
 using DoeMais.Extensions;
+using DoeMais.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace DoeMais.Controllers.User;
 
@@ -11,11 +11,11 @@ namespace DoeMais.Controllers.User;
 [Route("[controller]")]
 public class UserController : ControllerBase
 {
-    private readonly AppDbContext _context;
+    private readonly IUserService _userService;
 
-    public UserController(AppDbContext context)
+    public UserController(IUserService userService)
     {
-        _context = context;
+        _userService = userService;
     }
 
     [Authorize]
@@ -23,25 +23,29 @@ public class UserController : ControllerBase
     public async Task<IActionResult> Me()
     {
         var userId = User.GetUserId();
-        var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == userId);
+        var user = await _userService.GetByIdAsync(userId);
         if (user is null) return NotFound();
 
         var userProfileDto = user.ToDto();
         
         return Ok(userProfileDto);
     }
+    
     [Authorize]
     [HttpPut("me")]
     public async Task<IActionResult> UpdateProfile([FromBody] UpdateUserDto dto)
     {
         var userId = User.GetUserId();
-
-        var user = await _context.Users.FindAsync(userId);
-        if (user is null) return NotFound();
-
-        user.UpdateFromDto(dto);
-        await _context.SaveChangesAsync();
-
-        return NoContent();
+        try
+        {
+            var updatedUser = await _userService.UpdateUserAsync(userId, dto);
+            var updatedUserDto = updatedUser?.ToUpdateUserDto();
+        
+            return Ok(updatedUserDto);
+        }
+        catch (NotFoundException<Domain.Entities.User> e)
+        {
+            return NotFound(e.Message);
+        }
     }
 }
