@@ -1,5 +1,5 @@
 using DoeMais.DTO.Auth;
-using DoeMais.Domain.User;
+using DoeMais.Domain.Entities;
 using DoeMais.Services.Interfaces.Utils;
 
 namespace DoeMais.Extensions;

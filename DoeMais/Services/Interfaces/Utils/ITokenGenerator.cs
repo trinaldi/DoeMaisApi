@@ -1,4 +1,4 @@
-using DoeMais.Domain.User;
+using DoeMais.Domain.Entities;
 
 namespace DoeMais.Services.Interfaces.Utils;
 

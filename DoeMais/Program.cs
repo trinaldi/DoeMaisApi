@@ -3,7 +3,10 @@ using DoeMais.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using DoeMais.Repositories;
+using DoeMais.Repositories.Interfaces;
 using DoeMais.Services;
+using DoeMais.Services.Interfaces;
 using DoeMais.Services.Utils;
 using DoeMais.Services.Interfaces.Utils;
 using Microsoft.OpenApi.Models;
@@ -43,7 +46,6 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddScoped<TokenGeneratorService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -61,7 +63,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();
+
+builder.Services.AddScoped<TokenGeneratorService>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasherService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 
