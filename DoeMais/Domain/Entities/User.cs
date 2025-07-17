@@ -1,4 +1,4 @@
-namespace DoeMais.Domain.User;
+namespace DoeMais.Domain.Entities;
 
 public class User
 {
