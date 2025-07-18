@@ -2,7 +2,7 @@ namespace DoeMais.Domain.Entities;
 
 public class User
 {
-    public Int64 UserId { get; set; }
+    public long UserId { get; set; }
     public string? AvatarUrl { get; set; }
     public string Name { get; set; } = "";
     public string Email { get; set; } = default!;
@@ -15,5 +15,6 @@ public class User
     public string State { get; set; } = "";
     public string ZipCode { get; set; } = "";
     public string PasswordHash { get; set; } = default!;
-    public string Role { get; set; } = "Donor";
+    
+    public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
 }

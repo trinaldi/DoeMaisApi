@@ -54,7 +54,7 @@ public static class UserExtensions
     
     public static User Clone(this User user)
     {
-        return new User
+        var clonedUser =  new User
         {
             UserId = user.UserId,
             Name = user.Name,
@@ -66,7 +66,19 @@ public static class UserExtensions
             Neighborhood = user.Neighborhood,
             City = user.City,
             State = user.State,
-            ZipCode = user.ZipCode
+            ZipCode = user.ZipCode,
+            PasswordHash = user.PasswordHash,
         };
+        
+        foreach (var userRole in user.UserRoles)
+        {
+            clonedUser.UserRoles.Add(new UserRole
+            {
+                RoleId = userRole.RoleId,
+                UserId = clonedUser.UserId
+            });
+        }
+        
+        return clonedUser;
     }
 }

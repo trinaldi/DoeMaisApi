@@ -1,7 +1,10 @@
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using DoeMais.Domain.Entities;
 using DoeMais.Services.Interfaces.Utils;
 using DoeMais.Services.Utils;
+using DoeMais.Tests.Domain;
+using DoeMais.Tests.Extensions;
 using Microsoft.Extensions.Configuration;
 
 namespace DoeMais.Tests.Services.Utils;
@@ -12,14 +15,14 @@ public class GenerateTokenTests
     private ITokenGenerator _tokenGeneratorService;
     private string _jwtKey;
     private string _issuer;
-    private Random _random;
+    private User _user;
 
     [SetUp]
     public void SetUp()
     {
-        _random = new Random();
         _jwtKey = Guid.NewGuid().ToString();
         _issuer = "DoeMaisApiTests";
+        _user = FakeUser.Create().ToUser();
 
         var inMemorySettings = new Dictionary<string, string?>
         {
@@ -37,14 +40,7 @@ public class GenerateTokenTests
     [Test]
     public void GenerateToken_GeneratesCorrectToken()
     {
-        var user = new User
-        {
-            UserId = _random.NextInt64(),
-            Email = "test@email.com",
-            Role = "Donor"
-        };
-        
-        var token = _tokenGeneratorService.GenerateToken(user);
+        var token = _tokenGeneratorService.GenerateToken(_user);
         
         Assert.That(token, Is.Not.Null);
         Assert.That(token, Is.Not.WhiteSpace);
@@ -52,11 +48,17 @@ public class GenerateTokenTests
         var handler = new JwtSecurityTokenHandler();
         var jwt = handler.ReadJwtToken(token);
         
-        Assert.That(jwt.Claims.Any(c => c.Type == "sub" && c.Value == user.UserId.ToString()));
-        Assert.That(jwt.Claims.Any(c => c.Type == "email" && c.Value == user.Email));
-        Assert.That(jwt.Claims.Any(c => c.Type == "role" && c.Value == user.Role));
-        Assert.That(jwt.Issuer, Is.EqualTo(_issuer));
-        Assert.That(jwt.ValidTo, Is.GreaterThan(DateTime.UtcNow));
+        Assert.Multiple(() =>
+        {
+            Assert.That(jwt.Claims.Any(c => c.Type == "sub" && c.Value == _user.UserId.ToString()));
+            Assert.That(jwt.Claims.Any(c => c.Type == "email" && c.Value == _user.Email));
+            Assert.That(jwt.Claims.Any(c =>
+                c.Type == ClaimTypes.Role && 
+                c.Value == _user.UserRoles.First().Role.Name
+            ), Is.True);
+            Assert.That(jwt.Issuer, Is.EqualTo(_issuer));
+            Assert.That(jwt.ValidTo, Is.GreaterThan(DateTime.UtcNow));
+        });
     }
 
 }

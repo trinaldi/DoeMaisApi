@@ -9,12 +9,19 @@ public static class RegisterUserDtoExtensions
     public static User ToUser(this RegisterUserDto dto, IPasswordHasher _hasher)
     {
         
-        return new User
+        var user =  new User
         {
             Name = dto.Name,
             Email = dto.Email,
             PasswordHash = _hasher.HashPassword(dto.Password),
-            Role = dto.Role
         };
+        
+        user.UserRoles.Add(new UserRole
+        {
+            RoleId = 2,
+            User = user,
+        });
+        
+        return user;
     }
 }
