@@ -12,6 +12,7 @@ using Moq;
 using System.Security.Claims;
 using DoeMais.Exceptions;
 using DoeMais.Tests.Assertions;
+using Microsoft.EntityFrameworkCore.Update.Internal;
 
 namespace DoeMais.Tests.Controllers;
 
@@ -69,13 +70,15 @@ public class UserControllerTests
     }
 
     [Test]
-    public async Task PutMe_ShouldUpdateUser_WhenNameChanges()
+    public async Task UpdateProfile_ShouldUpdateUser_WhenNameChanges()
     {
         var newName = Guid.NewGuid().ToString();
-        _user.Name = newName;
-        var updateUserDto = _user.ToUpdateUserDto();
+        var updateUserDto = new UpdateUserDto { Name = newName };
+        var updatedUser = _user.Clone();
+        updatedUser.Name = newName;
+        
         _userServiceMock.Setup(x => x.UpdateUserAsync(_user.UserId, updateUserDto))
-            .ReturnsAsync(_user);
+            .ReturnsAsync(updatedUser);
        
         var result = await _userController.UpdateProfile(updateUserDto);
         var resultDto = result as OkObjectResult;

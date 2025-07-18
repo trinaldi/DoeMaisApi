@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using DoeMais.Repositories;
 using DoeMais.Data;
 using DoeMais.Domain.Entities;
+using DoeMais.Extensions;
 using DoeMais.Repositories.Interfaces;
 using DoeMais.Tests.Domain;
 using DoeMais.Tests.Extensions;
@@ -27,7 +28,7 @@ namespace DoeMais.Tests.Repositories
             _user = FakeUser.CreateFakeUser().ToUser();
             await _context.Users.AddAsync(_user);
             await _context.SaveChangesAsync();
-            
+            _context.Entry(_user).State = EntityState.Detached;
         }
 
         [TearDown]
@@ -45,8 +46,7 @@ namespace DoeMais.Tests.Repositories
             Assert.Multiple(() =>
             {
                 Assert.That(result, Is.Not.Null);
-                Assert.That(result, Is.EqualTo(_user));
-                
+                Assert.That(result?.UserId, Is.EqualTo(_user.UserId));
             });
         }
 
@@ -61,18 +61,18 @@ namespace DoeMais.Tests.Repositories
         [Test]
         public async Task PutAsync_ShouldUpdateUser_WhenNameIsChanged()
         {
+            var userToUpdate = _user.Clone();
             var newName = Guid.NewGuid().ToString();
-            _user.Name = newName;
-            await _userRepository.UpdateAsync(_user);
+            userToUpdate.Name = newName;
             
+            await _userRepository.UpdateAsync(userToUpdate);
             _context.ChangeTracker.Clear();
-            
-            var updatedUser = await _userRepository.GetByIdAsync(_user.UserId);
+            var updatedUser = await _userRepository.GetByIdAsync(userToUpdate.UserId);
             
             Assert.Multiple(() =>
             {
                 Assert.That(updatedUser, Is.Not.Null);
-                Assert.That(updatedUser!.UserId, Is.EqualTo(_user.UserId));
+                Assert.That(updatedUser!.UserId, Is.EqualTo(userToUpdate.UserId));
                 Assert.That(updatedUser!.Name, Is.EqualTo(newName));
             });
         }

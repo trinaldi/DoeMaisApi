@@ -51,4 +51,22 @@ public static class UserExtensions
         user.State = dto.State ?? user.State;
         user.ZipCode = dto.ZipCode ?? user.ZipCode;
     }
+    
+    public static User Clone(this User user)
+    {
+        return new User
+        {
+            UserId = user.UserId,
+            Name = user.Name,
+            Email = user.Email,
+            Phone = user.Phone,
+            Address = user.Address,
+            AvatarUrl = user.AvatarUrl,
+            Complement = user.Complement,
+            Neighborhood = user.Neighborhood,
+            City = user.City,
+            State = user.State,
+            ZipCode = user.ZipCode
+        };
+    }
 }
