@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations;
 
 public class UserProfileDto
 {
-    [Url(ErrorMessage = "AvatarUrl must be a valid URL.")]
     public string? AvatarUrl { get; set; }
 
     [Required(ErrorMessage = "Name is required.")]

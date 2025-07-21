@@ -25,9 +25,10 @@ namespace DoeMais.Tests.Repositories
                 .Options;
             _context = new AppDbContext(_options);
             _userRepository = new UserRepository(_context);
-            _user = FakeUser.CreateFakeUser().ToUser();
+            _user = FakeUser.Create().ToUser();
             await _context.Users.AddAsync(_user);
             await _context.SaveChangesAsync();
+            
             _context.Entry(_user).State = EntityState.Detached;
         }
 
@@ -62,6 +63,7 @@ namespace DoeMais.Tests.Repositories
         public async Task PutAsync_ShouldUpdateUser_WhenNameIsChanged()
         {
             var userToUpdate = _user.Clone();
+            
             var newName = Guid.NewGuid().ToString();
             userToUpdate.Name = newName;
             

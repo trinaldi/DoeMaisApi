@@ -1,5 +1,6 @@
 using Bogus;
 using Bogus.Extensions.Brazil;
+using DoeMais.Domain.Entities;
 
 namespace DoeMais.Tests.Domain;
 
@@ -18,9 +19,10 @@ public class FakeUser
     public string State { get; set; } = "";
     public string ZipCode { get; set; } = "";
     public string PasswordHash { get; set; } = default!;
-    public string Role { get; set; } = "Donor";
+    
+    public ICollection<FakeUserRole> FakeUserRoles { get; set; } = new List<FakeUserRole>();
 
-    public static FakeUser CreateFakeUser(long? userId = null)
+    public static FakeUser Create(long? userId = null)
     {
         var idBase = userId ?? 1;
 
@@ -37,9 +39,17 @@ public class FakeUser
             .RuleFor(u => u.City, f => f.Address.City())
             .RuleFor(u => u.State, f => f.Address.StateAbbr())
             .RuleFor(u => u.ZipCode, f => f.Address.ZipCode())
-            .RuleFor(u => u.PasswordHash, f => f.Internet.Password(60))
-            .RuleFor(u => u.Role, f => f.PickRandom("Donor", "Admin"));
+            .RuleFor(u => u.PasswordHash, f => f.Internet.Password(60));
 
-        return faker.Generate();
+        var fakeUser = faker.Generate();
+        
+        var fakeRoles = new List<FakeUserRole>
+        {
+            FakeUserRole.Create(fakeUser)
+        };
+        
+        fakeUser.FakeUserRoles = fakeRoles;
+
+        return fakeUser;
     }
 }

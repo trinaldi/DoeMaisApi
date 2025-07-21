@@ -4,7 +4,6 @@ namespace DoeMais.DTO.User;
 
 public class UpdateUserDto
 {
-    [Url(ErrorMessage = "AvatarUrl must be a valid URL.")]
     public string? AvatarUrl { get; set; }
 
     [StringLength(100, ErrorMessage = "Name must be at most 100 characters.")]

@@ -25,7 +25,7 @@ public class UserControllerTests
     [SetUp]
     public void Setup()
     {
-        _user = FakeUser.CreateFakeUser().ToUser();
+        _user = FakeUser.Create().ToUser();
         _userServiceMock = new Mock<IUserService>();
         _userController = new UserController(_userServiceMock.Object);
         

@@ -23,7 +23,7 @@ public class UserServiceTests
     {
         _userRepositoryMock = new Mock<IUserRepository>();
         _userService = new UserService(_userRepositoryMock.Object);
-        _user = FakeUser.CreateFakeUser().ToUser();
+        _user = FakeUser.Create().ToUser();
     }
 
     [Test]
