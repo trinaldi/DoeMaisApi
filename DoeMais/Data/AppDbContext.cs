@@ -18,6 +18,12 @@ public class AppDbContext : DbContext
                 .HasMaxLength(50);
         });
         
+        modelBuilder.Entity<User>()
+            .HasMany(u => u.Addresses)
+            .WithOne(a => a.User)
+            .HasForeignKey(a => a.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
         modelBuilder.Entity<UserRole>()
             .HasKey(ur => new { ur.UserId, ur.RoleId });
         
@@ -39,6 +45,7 @@ public class AppDbContext : DbContext
     }
 
     public DbSet<User> Users => Set<User>();
+    public DbSet<Address> Addresses => Set<Address>();
     public DbSet<Role> Roles => Set<Role>();
     public DbSet<UserRole> UserRoles => Set<UserRole>();
 }

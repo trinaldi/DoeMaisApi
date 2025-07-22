@@ -7,7 +7,7 @@ public static class FakeUserExtensions
 {
     public static User ToUser(this FakeUser fake)
     {
-        var user =  new User
+        var user = new User
         {
             UserId = fake.UserId,
             AvatarUrl = fake.AvatarUrl,
@@ -15,15 +15,19 @@ public static class FakeUserExtensions
             Email = fake.Email,
             Phone = fake.Phone,
             Cpf = fake.Cpf,
-            Address = fake.Address,
-            Complement = fake.Complement,
-            Neighborhood = fake.Neighborhood,
-            City = fake.City,
-            State = fake.State,
-            ZipCode = fake.ZipCode,
             PasswordHash = fake.PasswordHash,
+            Addresses = fake.FakeAddresses
+                .Select(a => new Address
+                {
+                    Street = a.Street,
+                    City = a.City,
+                    State = a.State,
+                    Neighborhood = a.Neighborhood,
+                    ZipCode = a.ZipCode,
+                    IsPrimary = a.IsPrimary
+                }).ToList()
         };
-        
+
         user.UserRoles = fake.FakeUserRoles
             .Select(fur => new UserRole
             {
