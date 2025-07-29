@@ -27,22 +27,33 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> Register(RegisterUserDto dto)
     {
         if (await _context.Users.AnyAsync(u => u.Email == dto.Email))
-            return BadRequest("Usuário já existe");
+            return BadRequest("User already exists");
 
-        var user = dto.ToUser(_passwordHasher);
+        try
+        {
+            var user = dto.ToUser(_passwordHasher);
 
-        _context.Users.Add(user);
-        await _context.SaveChangesAsync();
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
 
-        return Ok("Usuário registrado");
+            return Created();
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
     }
 
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginUserDto dto)
     {
-        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
+        var user = await _context.Users
+            .Include(u => u.UserRoles)
+            .ThenInclude(ur => ur.Role)
+            .FirstOrDefaultAsync(u => u.Email == dto.Email);
+        
         if (user == null || !_passwordHasher.VerifyHashedPassword(dto.Password, user.PasswordHash))
-            return Unauthorized("Credenciais inválidas");
+            return Unauthorized("Wrong credentials");
 
         var token = _tokenGeneratorService.GenerateToken(user);
         return Ok(new { token });

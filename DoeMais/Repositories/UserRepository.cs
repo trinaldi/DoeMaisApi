@@ -15,7 +15,9 @@ public class UserRepository : IUserRepository
     }
     public async Task<User?> GetByIdAsync(long id)
     {
-        return await _ctx.Users.FindAsync(id);
+        return await _ctx.Users
+            .Include(u => u.Addresses)
+            .FirstOrDefaultAsync(u => u.UserId == id);
     }
 
     public async Task UpdateAsync(User user)

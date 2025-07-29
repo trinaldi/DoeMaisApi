@@ -12,7 +12,6 @@ using Moq;
 using System.Security.Claims;
 using DoeMais.Exceptions;
 using DoeMais.Tests.Assertions;
-using Microsoft.EntityFrameworkCore.Update.Internal;
 
 namespace DoeMais.Tests.Controllers;
 
@@ -53,7 +52,7 @@ public class UserControllerTests
         {
             Assert.That(result, Is.InstanceOf<OkObjectResult>());
             Assert.That(okObjectResult.Value, Is.Not.Null);
-            DtoAssertions.AssertAreEqual(profileUserDto, resultDto);
+            Dtos.AssertAreEqual(profileUserDto, resultDto);
         });
         
     }
@@ -86,7 +85,7 @@ public class UserControllerTests
         Assert.Multiple(() =>
         {
             Assert.That(result, Is.TypeOf<OkObjectResult>());
-            DtoAssertions.AssertAreEqual(updateUserDto, resultDto?.Value);
+            Dtos.AssertAreEqual(updateUserDto, resultDto?.Value);
         });
         _userServiceMock.Verify(x => x.UpdateUserAsync(_user.UserId, updateUserDto), Times.Once);
     }

@@ -12,13 +12,19 @@ public static class UserExtensions
             AvatarUrl = user.AvatarUrl,
             Name = user.Name,
             Phone = user.Phone,
-            Address = user.Address,
-            Complement = user.Complement ?? "",
-            Neighborhood = user.Neighborhood,
-            City = user.City,
-            State = user.State,
-            ZipCode = user.ZipCode
-            
+            Addresses = user.Addresses
+                .Select(a => new AddressDto
+                {
+                    AddressId = a.AddressId,
+                    Street = a.Street,
+                    Complement = a.Complement,
+                    Neighborhood = a.Neighborhood,
+                    City = a.City,
+                    State = a.State,
+                    ZipCode = a.ZipCode,
+                    IsPrimary = a.IsPrimary
+                })
+                .ToList()
         };
     }
     
@@ -29,12 +35,19 @@ public static class UserExtensions
             AvatarUrl = user.AvatarUrl,
             Name = user.Name,
             Phone = user.Phone,
-            Address = user.Address,
-            Complement = user.Complement ?? "",
-            Neighborhood = user.Neighborhood,
-            City = user.City,
-            State = user.State,
-            ZipCode = user.ZipCode
+            Addresses = user.Addresses
+                .Select(a => new AddressDto
+                {
+                    AddressId = a.AddressId,
+                    Street = a.Street,
+                    Complement = a.Complement,
+                    Neighborhood = a.Neighborhood,
+                    City = a.City,
+                    State = a.State,
+                    ZipCode = a.ZipCode,
+                    IsPrimary = a.IsPrimary
+                })
+                .ToList()
             
         };
     }
@@ -44,12 +57,35 @@ public static class UserExtensions
         user.AvatarUrl = dto.AvatarUrl ?? user.AvatarUrl;
         user.Name = dto.Name ?? user.Name;
         user.Phone = dto.Phone ?? user.Phone;
-        user.Address = dto.Address ?? user.Address;
-        user.Complement = dto.Complement ?? user.Complement;
-        user.Neighborhood = dto.Neighborhood ?? user.Neighborhood;
-        user.City = dto.City ?? user.City;
-        user.State = dto.State ?? user.State;
-        user.ZipCode = dto.ZipCode ?? user.ZipCode;
+        
+        var addressDto = dto.Addresses.FirstOrDefault(a => a.IsPrimary);
+        if (addressDto == null) return;
+        
+        var address = user.Addresses.FirstOrDefault(a => a.IsPrimary);
+
+        if (address != null)
+        {
+            address.Street = addressDto.Street;
+            address.Complement = addressDto.Complement;
+            address.Neighborhood = addressDto.Neighborhood;
+            address.City = addressDto.City;
+            address.State = addressDto.State;
+            address.ZipCode = addressDto.ZipCode;
+        }
+        else
+        {
+            user.Addresses.Add(new Address
+            {
+                Street = addressDto.Street,
+                Complement = addressDto.Complement,
+                Neighborhood = addressDto.Neighborhood,
+                City = addressDto.City,
+                State = addressDto.State,
+                ZipCode = addressDto.ZipCode,
+                IsPrimary = true,
+                UserId = user.UserId
+            });
+        }
     }
     
     public static User Clone(this User user)
@@ -60,14 +96,21 @@ public static class UserExtensions
             Name = user.Name,
             Email = user.Email,
             Phone = user.Phone,
-            Address = user.Address,
-            AvatarUrl = user.AvatarUrl,
-            Complement = user.Complement,
-            Neighborhood = user.Neighborhood,
-            City = user.City,
-            State = user.State,
-            ZipCode = user.ZipCode,
-            PasswordHash = user.PasswordHash,
+            Cpf = user.Cpf,
+            Addresses = user.Addresses
+                .Select(a => new Address
+                {
+                    AddressId = a.AddressId,
+                    Street = a.Street,
+                    Complement = a.Complement,
+                    Neighborhood = a.Neighborhood,
+                    City = a.City,
+                    State = a.State,
+                    ZipCode = a.ZipCode,
+                    IsPrimary = a.IsPrimary,
+                    UserId = user.UserId
+                })
+                .ToList()
         };
         
         foreach (var userRole in user.UserRoles)

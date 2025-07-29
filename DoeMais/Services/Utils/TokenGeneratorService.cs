@@ -18,18 +18,14 @@ public class TokenGeneratorService : ITokenGenerator
 
     public string GenerateToken(User user)
     {
-        var roles = user.UserRoles.Select(ur => ur.Role.Name);
         var claims = new List<Claim>
         {
-            new Claim(JwtRegisteredClaimNames.Sub, user.UserId.ToString()),
-            new Claim(JwtRegisteredClaimNames.Email, user.Email),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            new(JwtRegisteredClaimNames.Sub, user.UserId.ToString()),
+            new(JwtRegisteredClaimNames.Email, user.Email),
+            new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
-
-        foreach (var role in user.UserRoles.Select(ur => ur.Role.Name))
-        {
-            claims.Add(new Claim(ClaimTypes.Role, role));
-        }
+        
+        claims.AddRange(user.UserRoles.Select(ur => ur.Role.Name).Select(role => new Claim(ClaimTypes.Role, role)));
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

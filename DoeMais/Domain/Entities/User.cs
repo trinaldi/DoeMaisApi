@@ -1,3 +1,5 @@
+using DoeMais.Domain.ValueObjects;
+
 namespace DoeMais.Domain.Entities;
 
 public class User
@@ -7,14 +9,15 @@ public class User
     public string Name { get; set; } = "";
     public string Email { get; set; } = default!;
     public string Phone { get; set; } = "";
-    public string Cpf { get; set; } = "";
-    public string Address { get; set; } = "";
-    public string? Complement { get; set; }
-    public string Neighborhood { get; set; } = "";
-    public string City { get; set; } = "";
-    public string State { get; set; } = "";
-    public string ZipCode { get; set; } = "";
+    public Cpf Cpf { get; set; }
+    public List<Address> Addresses { get; set; } = [];
     public string PasswordHash { get; set; } = default!;
     
     public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
+    
+    private string CpfValue
+    {
+        get => Cpf.Value;
+        set => Cpf = new Cpf(value);
+    }
 }
