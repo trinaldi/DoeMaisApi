@@ -1,4 +1,5 @@
 using DoeMais.Domain.Entities;
+using DoeMais.Domain.ValueObjects;
 using DoeMais.Tests.Domain;
 
 namespace DoeMais.Tests.Extensions;
@@ -32,7 +33,7 @@ public static class FakeUserExtensions
             .Select(fur => new UserRole
             {
                 RoleId = fur.RoleId,
-                Role = new Role(fur.RoleId, fur.Role.Name),
+                Role = new Role(fur.RoleId, fur?.Role?.Name),
                 User = user
             }).ToList();
         

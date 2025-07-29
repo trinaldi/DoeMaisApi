@@ -27,10 +27,10 @@ public class UserController : ControllerBase
         if (user is null) return NotFound();
 
         var userProfileDto = user.ToDto();
-        
+
         return Ok(userProfileDto);
     }
-    
+
     [Authorize]
     [HttpPut("me")]
     public async Task<IActionResult> UpdateProfile([FromBody] UpdateUserDto dto)
@@ -40,7 +40,7 @@ public class UserController : ControllerBase
         {
             var updatedUser = await _userService.UpdateUserAsync(userId, dto);
             var updatedUserDto = updatedUser?.ToUpdateUserDto();
-        
+
             return Ok(updatedUserDto);
         }
         catch (NotFoundException<Domain.Entities.User> e)

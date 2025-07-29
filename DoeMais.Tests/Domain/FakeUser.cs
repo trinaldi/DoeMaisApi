@@ -1,6 +1,6 @@
 using Bogus;
 using Bogus.Extensions.Brazil;
-using DoeMais.Domain.Entities;
+using DoeMais.Domain.ValueObjects;
 
 namespace DoeMais.Tests.Domain;
 
@@ -11,7 +11,7 @@ public class FakeUser
     public string Name { get; set; } = "";
     public string Email { get; set; } = default!;
     public string Phone { get; set; } = "";
-    public string Cpf { get; set; } = "";
+    public Cpf Cpf { get; set; }
     public List<FakeAddress> FakeAddresses { get; set; } = [];
     public string PasswordHash { get; set; } = default!;
     
@@ -27,7 +27,7 @@ public class FakeUser
             .RuleFor(u => u.Name, f => f.Name.FullName())
             .RuleFor(u => u.Email, f => f.Internet.Email())
             .RuleFor(u => u.Phone, f => f.Phone.PhoneNumber())
-            .RuleFor(u => u.Cpf, f => f.Person.Cpf(false))
+            .RuleFor(u => u.Cpf, f => new Cpf(ExtensionsForBrazil.Cpf(f.Person, false)))
             .RuleFor(u => u.PasswordHash, f => f.Internet.Password(60));
 
         var fakeUser = faker.Generate();

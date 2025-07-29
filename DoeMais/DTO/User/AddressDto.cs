@@ -2,7 +2,7 @@ namespace DoeMais.DTO.User;
 
 public class AddressDto
 {
-    public long Id { get; set; }
+    public long AddressId { get; set; }
     public string Street { get; set; } = "";
     public string? Complement { get; set; }
     public string Neighborhood { get; set; } = "";

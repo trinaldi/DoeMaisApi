@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using DoeMais.Domain.Entities;
+using DoeMais.Domain.ValueObjects;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DoeMais.Data;
 
@@ -16,6 +18,19 @@ public class AppDbContext : DbContext
             entity.Property(r => r.Name)
                 .IsRequired()
                 .HasMaxLength(50);
+        });
+        
+        var cpfConverter = new ValueConverter<Cpf, string>(
+            v => v.Value,
+            v => new Cpf(v));  
+        
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.Property(u => u.Cpf)
+                .HasConversion(cpfConverter)
+                .HasColumnName("Cpf")
+                // TODO: Add CPF Requirement.
+                .HasMaxLength(11);
         });
         
         modelBuilder.Entity<User>()

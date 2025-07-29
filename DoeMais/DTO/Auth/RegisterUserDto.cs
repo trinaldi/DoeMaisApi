@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using DoeMais.Domain.ValueObjects;
 
 namespace DoeMais.DTO.Auth;
 
@@ -10,5 +11,5 @@ public class RegisterUserDto
     [EmailAddress]
     public string Email { get; set; } = default!;
     public string Password { get; set; } = default!;
-    public string Role { get; set; } = "Donor";
+    public string? Cpf { get; set; }
 }

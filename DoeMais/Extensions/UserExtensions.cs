@@ -15,6 +15,7 @@ public static class UserExtensions
             Addresses = user.Addresses
                 .Select(a => new AddressDto
                 {
+                    AddressId = a.AddressId,
                     Street = a.Street,
                     Complement = a.Complement,
                     Neighborhood = a.Neighborhood,
@@ -37,7 +38,7 @@ public static class UserExtensions
             Addresses = user.Addresses
                 .Select(a => new AddressDto
                 {
-                    Id = a.AddressId,
+                    AddressId = a.AddressId,
                     Street = a.Street,
                     Complement = a.Complement,
                     Neighborhood = a.Neighborhood,
@@ -95,6 +96,7 @@ public static class UserExtensions
             Name = user.Name,
             Email = user.Email,
             Phone = user.Phone,
+            Cpf = user.Cpf,
             Addresses = user.Addresses
                 .Select(a => new Address
                 {
