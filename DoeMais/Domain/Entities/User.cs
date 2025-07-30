@@ -11,6 +11,7 @@ public class User
     public string Phone { get; set; } = "";
     public Cpf Cpf { get; set; }
     public List<Address> Addresses { get; set; } = [];
+    public List<Donation> Donations { get; set; } = [];
     public string PasswordHash { get; set; } = default!;
     
     public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
