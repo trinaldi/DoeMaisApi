@@ -13,6 +13,16 @@ public class AppDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+        {
+            modelBuilder.Entity(entityType.ClrType)
+                .Property<DateTime>("CreatedAt")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            modelBuilder.Entity(entityType.ClrType)
+                .Property<DateTime?>("UpdatedAt");
+        }
+        
         modelBuilder.Entity<Role>(entity =>
         {
             entity.Property(r => r.Name)
@@ -52,13 +62,43 @@ public class AppDbContext : DbContext
             .WithMany(r => r.UserRoles)
             .HasForeignKey(ur => ur.RoleId);
 
+        var seedDate = new DateTime(2025, 07, 30, 0, 0, 0, DateTimeKind.Utc);
+
         modelBuilder.Entity<Role>().HasData(
-            new Role(1, "Admin"),
-            new Role(2, "Donor"),
-            new Role(3, "Charity")
+            new { RoleId = 1L, Name = "Admin", CreatedAt = seedDate, UpdatedAt = seedDate },
+            new { RoleId = 2L, Name = "Donor", CreatedAt = seedDate, UpdatedAt = seedDate },
+            new { RoleId = 3L, Name = "Charity", CreatedAt = seedDate, UpdatedAt = seedDate }
         );
     }
 
+    public override int SaveChanges()
+    {
+        UpdateTimestamps();
+        return base.SaveChanges();
+    }
+
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        UpdateTimestamps();
+        return await base.SaveChangesAsync(cancellationToken);
+    }
+
+    private void UpdateTimestamps()
+    {
+        var entries = ChangeTracker.Entries()
+            .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified);
+
+        foreach (var entry in entries)
+        {
+            entry.Property("UpdatedAt").CurrentValue = DateTime.UtcNow;
+
+            if (entry.State == EntityState.Added)
+            {
+                entry.Property("CreatedAt").CurrentValue = DateTime.UtcNow;
+            }
+        }
+    }
+    
     public DbSet<User> Users => Set<User>();
     public DbSet<Address> Addresses => Set<Address>();
     public DbSet<Role> Roles => Set<Role>();

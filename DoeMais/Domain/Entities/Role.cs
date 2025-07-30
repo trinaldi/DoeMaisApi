@@ -2,7 +2,7 @@ namespace DoeMais.Domain.Entities;
 
 public class Role
 {
-    public Int64 RoleId { get; set; }
+    public long RoleId { get; set; }
     public string Name { get; private set; }
 
     public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
