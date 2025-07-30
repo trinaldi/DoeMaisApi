@@ -56,6 +56,12 @@ public class AppDbContext : DbContext
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
         
+        modelBuilder.Entity<Donation>()
+            .HasOne(d => d.Address)
+            .WithMany(a => a.Donations)
+            .HasForeignKey(d => d.AddressId)
+            .OnDelete(DeleteBehavior.Restrict);
+        
         modelBuilder.Entity<UserRole>()
             .HasKey(ur => new { ur.UserId, ur.RoleId });
         
