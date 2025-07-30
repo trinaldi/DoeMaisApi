@@ -1,7 +1,6 @@
-using DoeMais.Domain.Entities;
 using DoeMais.Domain.Enums;
 
-namespace DoeMais.Domain;
+namespace DoeMais.Domain.Entities;
 
 public class Donation
 {
@@ -13,9 +12,6 @@ public class Donation
     public string Description { get; set; }
     public int? Quantity { get; set; }
     public Status Status { get; set; }
-    
-    public DateTime? CreatedAt { get; set; }
-    public DateTime? UpdatedAt { get; set; }
     
     public List<string> Images { get; set; }
 }
