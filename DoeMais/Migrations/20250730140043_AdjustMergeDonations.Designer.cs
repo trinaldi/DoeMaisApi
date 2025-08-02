@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using DoeMais.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DoeMais.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250730140043_AdjustMergeDonations")]
+    partial class AdjustMergeDonations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -83,9 +86,6 @@ namespace DoeMais.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("DonationId"));
 
-                    b.Property<long>("AddressId")
-                        .HasColumnType("bigint");
-
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
@@ -116,8 +116,6 @@ namespace DoeMais.Migrations
                         .HasColumnType("bigint");
 
                     b.HasKey("DonationId");
-
-                    b.HasIndex("AddressId");
 
                     b.HasIndex("UserId");
 
@@ -255,19 +253,11 @@ namespace DoeMais.Migrations
 
             modelBuilder.Entity("DoeMais.Domain.Entities.Donation", b =>
                 {
-                    b.HasOne("DoeMais.Domain.Entities.Address", "Address")
-                        .WithMany("Donations")
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("DoeMais.Domain.Entities.User", "User")
                         .WithMany("Donations")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Address");
 
                     b.Navigation("User");
                 });
@@ -289,11 +279,6 @@ namespace DoeMais.Migrations
                     b.Navigation("Role");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("DoeMais.Domain.Entities.Address", b =>
-                {
-                    b.Navigation("Donations");
                 });
 
             modelBuilder.Entity("DoeMais.Domain.Entities.Role", b =>

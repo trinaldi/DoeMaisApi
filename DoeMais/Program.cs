@@ -68,6 +68,8 @@ builder.Services.AddScoped<TokenGeneratorService>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasherService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IDonationRepository, DonationRepository>();
+builder.Services.AddScoped<IDonationService, DonationService>();
 
 var app = builder.Build();
 

@@ -14,4 +14,5 @@ public class Address
     public bool IsPrimary { get; set; } = true;
 
     public User User { get; set; } = null!;
+    public ICollection<Donation> Donations { get; set; } = [];
 }

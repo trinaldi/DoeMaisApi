@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using DoeMais.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DoeMais.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250729142210_AddDonationEntity")]
+    partial class AddDonationEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -23,59 +26,7 @@ namespace DoeMais.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("DoeMais.Domain.Entities.Address", b =>
-                {
-                    b.Property<long>("AddressId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("AddressId"));
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Complement")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<bool>("IsPrimary")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Neighborhood")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("State")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Street")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("ZipCode")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("AddressId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Addresses");
-                });
-
-            modelBuilder.Entity("DoeMais.Domain.Entities.Donation", b =>
+            modelBuilder.Entity("DoeMais.Domain.Donation", b =>
                 {
                     b.Property<long>("DonationId")
                         .ValueGeneratedOnAdd()
@@ -83,13 +34,8 @@ namespace DoeMais.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("DonationId"));
 
-                    b.Property<long>("AddressId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -117,11 +63,53 @@ namespace DoeMais.Migrations
 
                     b.HasKey("DonationId");
 
-                    b.HasIndex("AddressId");
-
                     b.HasIndex("UserId");
 
                     b.ToTable("Donations");
+                });
+
+            modelBuilder.Entity("DoeMais.Domain.Entities.Address", b =>
+                {
+                    b.Property<long>("AddressId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("AddressId"));
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Complement")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsPrimary")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Neighborhood")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Street")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("ZipCode")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("AddressId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Addresses");
                 });
 
             modelBuilder.Entity("DoeMais.Domain.Entities.Role", b =>
@@ -132,18 +120,10 @@ namespace DoeMais.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("RoleId"));
 
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("RoleId");
 
@@ -153,23 +133,17 @@ namespace DoeMais.Migrations
                         new
                         {
                             RoleId = 1L,
-                            CreatedAt = new DateTime(2025, 7, 30, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Name = "Admin",
-                            UpdatedAt = new DateTime(2025, 7, 30, 0, 0, 0, 0, DateTimeKind.Utc)
+                            Name = "Admin"
                         },
                         new
                         {
                             RoleId = 2L,
-                            CreatedAt = new DateTime(2025, 7, 30, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Name = "Donor",
-                            UpdatedAt = new DateTime(2025, 7, 30, 0, 0, 0, 0, DateTimeKind.Utc)
+                            Name = "Donor"
                         },
                         new
                         {
                             RoleId = 3L,
-                            CreatedAt = new DateTime(2025, 7, 30, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Name = "Charity",
-                            UpdatedAt = new DateTime(2025, 7, 30, 0, 0, 0, 0, DateTimeKind.Utc)
+                            Name = "Charity"
                         });
                 });
 
@@ -190,11 +164,6 @@ namespace DoeMais.Migrations
                         .HasColumnType("character varying(11)")
                         .HasColumnName("Cpf");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("text");
@@ -211,9 +180,6 @@ namespace DoeMais.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
                     b.HasKey("UserId");
 
                     b.ToTable("Users");
@@ -227,19 +193,22 @@ namespace DoeMais.Migrations
                     b.Property<long>("RoleId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
                     b.HasKey("UserId", "RoleId");
 
                     b.HasIndex("RoleId");
 
                     b.ToTable("UserRoles");
+                });
+
+            modelBuilder.Entity("DoeMais.Domain.Donation", b =>
+                {
+                    b.HasOne("DoeMais.Domain.Entities.User", "User")
+                        .WithMany("Donations")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("DoeMais.Domain.Entities.Address", b =>
@@ -249,25 +218,6 @@ namespace DoeMais.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("DoeMais.Domain.Entities.Donation", b =>
-                {
-                    b.HasOne("DoeMais.Domain.Entities.Address", "Address")
-                        .WithMany("Donations")
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("DoeMais.Domain.Entities.User", "User")
-                        .WithMany("Donations")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Address");
 
                     b.Navigation("User");
                 });
@@ -289,11 +239,6 @@ namespace DoeMais.Migrations
                     b.Navigation("Role");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("DoeMais.Domain.Entities.Address", b =>
-                {
-                    b.Navigation("Donations");
                 });
 
             modelBuilder.Entity("DoeMais.Domain.Entities.Role", b =>

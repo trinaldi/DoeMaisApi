@@ -1,5 +1,6 @@
 using DoeMais.DTO.User;
 using DoeMais.Domain.Entities;
+using DoeMais.DTO.Address;
 
 namespace DoeMais.Extensions;
 

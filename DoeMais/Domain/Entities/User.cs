@@ -10,14 +10,9 @@ public class User
     public string Email { get; set; } = default!;
     public string Phone { get; set; } = "";
     public Cpf Cpf { get; set; }
-    public List<Address> Addresses { get; set; } = [];
+    public ICollection<Address> Addresses { get; set; } = [];
+    public ICollection<Donation> Donations { get; set; } = [];
     public string PasswordHash { get; set; } = default!;
     
     public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
-    
-    private string CpfValue
-    {
-        get => Cpf.Value;
-        set => Cpf = new Cpf(value);
-    }
 }

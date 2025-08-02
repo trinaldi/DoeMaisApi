@@ -1,3 +1,4 @@
+using DoeMais.Domain;
 using Microsoft.EntityFrameworkCore;
 using DoeMais.Domain.Entities;
 using DoeMais.Domain.ValueObjects;
@@ -39,7 +40,6 @@ public class AppDbContext : DbContext
             entity.Property(u => u.Cpf)
                 .HasConversion(cpfConverter)
                 .HasColumnName("Cpf")
-                // TODO: Add CPF Requirement.
                 .HasMaxLength(11);
         });
         
@@ -48,6 +48,20 @@ public class AppDbContext : DbContext
             .WithOne(a => a.User)
             .HasForeignKey(a => a.UserId)
             .OnDelete(DeleteBehavior.Cascade);
+        
+        modelBuilder.Entity<User>()
+            .HasMany(u => u.Donations)
+            .WithOne(d => d.User)
+            .HasForeignKey(u => u.UserId)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        modelBuilder.Entity<Donation>()
+            .HasOne(d => d.Address)
+            .WithMany(a => a.Donations)
+            .HasForeignKey(d => d.AddressId)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Restrict);
         
         modelBuilder.Entity<UserRole>()
             .HasKey(ur => new { ur.UserId, ur.RoleId });
@@ -103,4 +117,5 @@ public class AppDbContext : DbContext
     public DbSet<Address> Addresses => Set<Address>();
     public DbSet<Role> Roles => Set<Role>();
     public DbSet<UserRole> UserRoles => Set<UserRole>();
+    public DbSet<Donation> Donations => Set<Donation>();
 }
