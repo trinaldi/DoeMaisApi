@@ -1,13 +1,13 @@
 namespace DoeMais.DTO.Address;
 
-public class AddressDto
+public record AddressDto
 {
-    public long AddressId { get; set; }
-    public string Street { get; set; } = "";
-    public string? Complement { get; set; }
-    public string Neighborhood { get; set; } = "";
-    public string City { get; set; } = "";
-    public string State { get; set; } = "";
-    public string ZipCode { get; set; } = "";
-    public bool IsPrimary { get; set; } 
+    public long AddressId { get; init; }
+    public string? Street { get; init; }
+    public string? Complement { get; init; }
+    public string? Neighborhood { get; init; }
+    public string? City { get; init; }
+    public string? State { get; init; }
+    public string? ZipCode { get; init; }
+    public bool IsPrimary { get; init; } 
 }
