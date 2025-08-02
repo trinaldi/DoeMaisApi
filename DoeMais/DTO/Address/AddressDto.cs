@@ -1,4 +1,4 @@
-namespace DoeMais.DTO.User;
+namespace DoeMais.DTO.Address;
 
 public class AddressDto
 {

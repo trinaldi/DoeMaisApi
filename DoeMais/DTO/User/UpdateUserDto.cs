@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using DoeMais.DTO.Address;
 
 namespace DoeMais.DTO.User;
 
@@ -12,5 +13,5 @@ public class UpdateUserDto
     [RegularExpression(@"^\d{11}$", ErrorMessage = "Phone number must be exactly 11 digits, e.g. 99999999999.")]
     public string? Phone { get; set; } = "";
 
-    public List<AddressDto> Addresses { get; set; } = [];
+    public ICollection<AddressDto> Addresses { get; set; } = [];
 }

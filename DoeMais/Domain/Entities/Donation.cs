@@ -1,4 +1,5 @@
 using DoeMais.Domain.Enums;
+using System.Collections.Generic;
 
 namespace DoeMais.Domain.Entities;
 
@@ -15,6 +16,6 @@ public class Donation
     public string Description { get; set; }
     public int? Quantity { get; set; }
     public Status Status { get; set; }
-    
-    public List<string> Images { get; set; }
+
+    public ICollection<string> Images { get; set; } = [];
 }

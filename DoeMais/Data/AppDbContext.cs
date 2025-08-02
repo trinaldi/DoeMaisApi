@@ -60,6 +60,7 @@ public class AppDbContext : DbContext
             .HasOne(d => d.Address)
             .WithMany(a => a.Donations)
             .HasForeignKey(d => d.AddressId)
+            .IsRequired()
             .OnDelete(DeleteBehavior.Restrict);
         
         modelBuilder.Entity<UserRole>()
