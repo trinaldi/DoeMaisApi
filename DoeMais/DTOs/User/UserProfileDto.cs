@@ -4,17 +4,20 @@ namespace DoeMais.DTO.User;
 
 using System.ComponentModel.DataAnnotations;
 
-public class UserProfileDto
+public record UserProfileDto
 {
-    public string? AvatarUrl { get; set; }
+    public string? AvatarUrl { get; init; }
 
     [Required(ErrorMessage = "Name is required.")]
     [StringLength(100, ErrorMessage = "Name must be at most 100 characters.")]
-    public string Name { get; set; } = "";
+    public string Name { get; init; } = "";
 
     [Required(ErrorMessage = "Phone is required.")]
     [RegularExpression(@"^\d{11}$", ErrorMessage = "Phone number must be exactly 11 digits, e.g. 99999999999.")]
-    public string Phone { get; set; } = "";
+    public string Phone { get; init; } = "";
 
-    public ICollection<AddressDto> Addresses { get; set; } = [];
+    public ICollection<AddressDto> Addresses { get; init; } = [];
+    
+    public override string ToString() => 
+        $"AvatarUrl: {AvatarUrl}, Name: {Name}, Phone: {Phone}, Addresses: {Addresses?.Count ?? 0}";
 }

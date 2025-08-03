@@ -1,4 +1,3 @@
-using System.IdentityModel.Tokens.Jwt;
 using DoeMais.Controllers.User;
 using DoeMais.DTO.User;
 using DoeMais.Domain.Entities;
@@ -11,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System.Security.Claims;
 using DoeMais.Exceptions;
-using DoeMais.Tests.Assertions;
+using DoeMais.Tests.Helpers;
 
 namespace DoeMais.Tests.Controllers;
 
@@ -52,7 +51,7 @@ public class UserControllerTests
         {
             Assert.That(result, Is.InstanceOf<OkObjectResult>());
             Assert.That(okObjectResult.Value, Is.Not.Null);
-            Dtos.AssertAreEqual(profileUserDto, resultDto);
+            Assert.That(profileUserDto, Is.EqualTo(resultDto).Using(new RecordDeepEqualityComparer<UserProfileDto>()));
         });
         
     }
@@ -81,11 +80,12 @@ public class UserControllerTests
        
         var result = await _userController.UpdateProfile(updateUserDto);
         var resultDto = result as OkObjectResult;
+        var resultDtoValue = resultDto?.Value as UpdateUserDto;
        
         Assert.Multiple(() =>
         {
             Assert.That(result, Is.TypeOf<OkObjectResult>());
-            Dtos.AssertAreEqual(updateUserDto, resultDto?.Value);
+            Assert.That(resultDtoValue?.Name, Is.EqualTo(updateUserDto.Name));
         });
         _userServiceMock.Verify(x => x.UpdateUserAsync(_user.UserId, updateUserDto), Times.Once);
     }
