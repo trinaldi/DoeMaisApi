@@ -8,10 +8,10 @@ public class Result<T>
     public string? Message { get; }
     public T? Data { get; }
 
-    public Result(ResultType type, string? message, T? data = default)
+    public Result(ResultType type, T? data = default, string? message = null)
     {
         Type = type;
-        Message = message;
         Data = data;
+        Message = type == ResultType.Success ? null : message;
     }
 }

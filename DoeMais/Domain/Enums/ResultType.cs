@@ -7,5 +7,6 @@ public enum ResultType
     Warning,
     NotFound,
     Unauthorized,
-    Unknown
+    Unknown,
+    Mismatch
 }
