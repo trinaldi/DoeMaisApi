@@ -54,8 +54,6 @@ public class DonationController : ControllerBase
     public async Task<IActionResult> UpdateDonationAsync(long id, [FromBody] UpdateDonationDto dto)
     {
         var userId = User.GetUserId();
-        dto.DonationId = id;
-
         var updatedDonation = await _donationService.UpdateDonationAsync(dto, userId);
 
         return Ok(updatedDonation);
