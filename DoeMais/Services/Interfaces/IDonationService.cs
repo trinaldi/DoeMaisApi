@@ -5,9 +5,9 @@ namespace DoeMais.Services.Interfaces;
 
 public interface IDonationService
 {
-    Task<Result<DonationDto?>> CreateDonationAsync(CreateDonationDto donation, long userId);
-    Task<Result<List<DonationDto>>?> GetDonationListAsync(long userId);
-    Task<Result<DonationDto?>> GetDonationByIdAsync(long id, long userId);
-    Task<Result<DonationDto?>> UpdateDonationAsync(UpdateDonationDto donation, long userId);
-    Task<Result<bool>> DeleteDonationAsync(long id, long userId);
+    Task<Result<DonationDto?>> CreateDonationAsync(CreateDonationDto donation);
+    Task<Result<List<DonationDto>>?> GetDonationListAsync();
+    Task<Result<DonationDto?>> GetDonationByIdAsync(long id);
+    Task<Result<DonationDto?>> UpdateDonationAsync(UpdateDonationDto donation);
+    Task<Result<bool>> DeleteDonationAsync(long id);
 }

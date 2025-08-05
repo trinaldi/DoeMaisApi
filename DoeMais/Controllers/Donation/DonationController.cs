@@ -21,8 +21,7 @@ public class DonationController : ControllerBase
     [HttpPost("me")]
     public async Task<IActionResult> CreateDonationForMe([FromBody] CreateDonationDto dto)
     {
-        var userId = User.GetUserId();
-        var result = await _donationService.CreateDonationAsync(dto, userId);
+        var result = await _donationService.CreateDonationAsync(dto);
 
         return result.Type switch
         {
@@ -36,8 +35,7 @@ public class DonationController : ControllerBase
     [HttpGet("{donationId:long}")]
     public async Task<IActionResult> GetDonationById(long donationId)
     {
-        var userId = User.GetUserId();
-        var result = await _donationService.GetDonationByIdAsync(donationId, userId);
+        var result = await _donationService.GetDonationByIdAsync(donationId);
         
         return result.Type switch
         {
@@ -51,8 +49,7 @@ public class DonationController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetDonationList()
     {
-        var userId = User.GetUserId();
-        var result = await _donationService.GetDonationListAsync(userId);
+        var result = await _donationService.GetDonationListAsync();
         
         return result?.Type switch
         {
@@ -69,8 +66,7 @@ public class DonationController : ControllerBase
         if (donationId != dto.DonationId)
             return BadRequest();
         
-        var userId = User.GetUserId();
-        var result = await _donationService.UpdateDonationAsync(dto, userId);
+        var result = await _donationService.UpdateDonationAsync(dto);
         
         return result.Type switch
         {
@@ -85,8 +81,7 @@ public class DonationController : ControllerBase
     [HttpDelete("{donationId:long}")]
     public async Task<IActionResult> DeleteDonation(long donationId)
     {
-        var userId = User.GetUserId();
-        var result = await _donationService.DeleteDonationAsync(donationId, userId);
+        var result = await _donationService.DeleteDonationAsync(donationId);
         
         return result.Type switch
         {

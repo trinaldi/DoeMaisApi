@@ -1,6 +1,8 @@
+using DoeMais.Domain.Interfaces;
+
 namespace DoeMais.Domain.Entities;
 
-public class Address
+public class Address : IUserOwned
 {
     public long AddressId { get; set; }
     public long UserId { get; set; }

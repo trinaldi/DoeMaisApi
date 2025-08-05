@@ -4,8 +4,10 @@ using DoeMais.Data;
 using DoeMais.Domain.Entities;
 using DoeMais.Extensions;
 using DoeMais.Repositories.Interfaces;
+using DoeMais.Services.Query;
 using DoeMais.Tests.Domain;
 using DoeMais.Tests.Extensions;
+using Moq;
 
 namespace DoeMais.Tests.Repositories
 {
@@ -15,15 +17,18 @@ namespace DoeMais.Tests.Repositories
         private AppDbContext _context;
         private DbContextOptions<AppDbContext> _options;
         private IUserRepository _userRepository;
+        private Mock<ICurrentUserService>_mockCurrentUserService;
         private User _user;
 
         [SetUp]
         public async Task Setup()
         {
+            _mockCurrentUserService = new Mock<ICurrentUserService>();
+            _mockCurrentUserService.Setup(m => m.UserId).Returns(1);
             _options = new DbContextOptionsBuilder<AppDbContext>()
                 .UseInMemoryDatabase(databaseName: $"DoeMaisTestDb_{System.Guid.NewGuid()}")
                 .Options;
-            _context = new AppDbContext(_options);
+            _context = new AppDbContext(_options, _mockCurrentUserService.Object);
             _userRepository = new UserRepository(_context);
             _user = FakeUser.Create().ToUser();
             await _context.Users.AddAsync(_user);

@@ -20,33 +20,30 @@ public class DonationRepository : IDonationRepository
         
         var donationWithIncludes = await _ctx.Donations
             .Include(d => d.Address)
-            .Include(d => d.User)
             .FirstOrDefaultAsync(d => d.DonationId == donation.DonationId);
 
         return donationWithIncludes;
     }
 
-    public async Task<List<Donation>> GetDonationListAsync(long userId)
+    public async Task<List<Donation>> GetDonationListAsync()
     {
-        return await _ctx.Donations.Where(d => d.UserId == userId)
+        return await _ctx.Donations
             .Include(d => d.Address)
-            .Include(d => d.User)
             .ToListAsync();
     }
 
-    public async Task<Donation?> GetDonationByIdAsync(long id, long userId)
+    public async Task<Donation?> GetDonationByIdAsync(long donationId)
     {
         return await _ctx.Donations
-            .Where(d => d.DonationId == id && d.UserId == userId)
+            .Where(d => d.DonationId == donationId)
             .Include(d => d.Address)
-            .Include(d => d.User)
             .FirstOrDefaultAsync();
     }
 
-    public async Task<bool> DeleteDonationAsync(long id, long userId)
+    public async Task<bool> DeleteDonationAsync(long id)
     {
         var donation = await _ctx.Donations
-            .Where(d => d.DonationId == id && d.UserId == userId)
+            .Where(d => d.DonationId == id)
             .FirstOrDefaultAsync();
         if (donation == null) return false;
         
@@ -56,14 +53,13 @@ public class DonationRepository : IDonationRepository
         return true;
     }
 
-    public async Task<Donation?> UpdateDonationAsync(Donation donation, long userId)
+    public async Task<Donation?> UpdateDonationAsync(Donation donation)
     {
         _ctx.Donations.Update(donation);
         await _ctx.SaveChangesAsync();
         
         return await _ctx.Donations
             .Include(d => d.Address)
-            .Include(d => d.User)
             .FirstOrDefaultAsync(d => d.DonationId == donation.DonationId);
     }
 }

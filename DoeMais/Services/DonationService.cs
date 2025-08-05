@@ -18,9 +18,9 @@ public class DonationService : IDonationService
         _donationRepository = donationRepository;
     }
     
-    public async Task<Result<DonationDto?>> CreateDonationAsync(CreateDonationDto dto, long userId)
+    public async Task<Result<DonationDto?>> CreateDonationAsync(CreateDonationDto dto)
     {
-        var donation = dto.ToEntity(userId);
+        var donation = dto.ToEntity();
         var result = await _donationRepository.CreateDonationAsync(donation);
         
         return result == null 
@@ -28,35 +28,39 @@ public class DonationService : IDonationService
             : new Result<DonationDto?>(ResultType.Success, result.ToDto());
     }
 
-    public async Task<Result<List<DonationDto>>?> GetDonationListAsync(long userId)
+    public async Task<Result<List<DonationDto>>?> GetDonationListAsync()
     {
-        var donations = await _donationRepository.GetDonationListAsync(userId);
+        var donations = await _donationRepository.GetDonationListAsync();
+        
         return new Result<List<DonationDto>>(ResultType.Success, donations.Select(d => d.ToDto()).ToList());
     }
 
-    public async Task<Result<DonationDto?>> GetDonationByIdAsync(long id, long userId)
+    public async Task<Result<DonationDto?>> GetDonationByIdAsync(long donationId)
     {
-        var donation = await _donationRepository.GetDonationByIdAsync(id, userId);
+        var donation = await _donationRepository.GetDonationByIdAsync(donationId);
+        
         return donation == null 
             ? new Result<DonationDto?>(ResultType.NotFound, null, "No donation found.") 
             : new Result<DonationDto?>(ResultType.Success, donation?.ToDto());
     }
 
-    public async Task<Result<DonationDto?>> UpdateDonationAsync(UpdateDonationDto donation, long userId)
+    public async Task<Result<DonationDto?>> UpdateDonationAsync(UpdateDonationDto donation)
     {
-        var foundDonation = await _donationRepository.GetDonationByIdAsync(donation.DonationId, userId);
+        var foundDonation = await _donationRepository.GetDonationByIdAsync(donation.DonationId);
         if (foundDonation == null) return new Result<DonationDto?>(ResultType.NotFound, null, "Donation could not be found.");
-
+        
         foundDonation.UpdateFromDto(donation);
-        var updatedDonation = await _donationRepository.UpdateDonationAsync(foundDonation, userId);
+        var updatedDonation = await _donationRepository.UpdateDonationAsync(foundDonation);
+        
         return updatedDonation == null 
             ? new Result<DonationDto?>(ResultType.Error, null, "Error updating donation.") 
             : new Result<DonationDto?>(ResultType.Success, updatedDonation.ToDto());
     }
 
-    public async Task<Result<bool>> DeleteDonationAsync(long id, long userId)
+    public async Task<Result<bool>> DeleteDonationAsync(long donationId)
     {
-        var success = await _donationRepository.DeleteDonationAsync(id, userId);
+        var success = await _donationRepository.DeleteDonationAsync(donationId);
+        
         return success 
             ? new Result<bool>(ResultType.Success, success)
             : new Result<bool>(ResultType.Error, success);
