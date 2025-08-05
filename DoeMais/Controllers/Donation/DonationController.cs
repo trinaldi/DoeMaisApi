@@ -1,3 +1,4 @@
+using DoeMais.Domain.Enums;
 using DoeMais.DTO.Donation;
 using DoeMais.Extensions;
 using DoeMais.Services.Interfaces;
@@ -21,21 +22,29 @@ public class DonationController : ControllerBase
     public async Task<IActionResult> CreateDonationForMe([FromBody] CreateDonationDto dto)
     {
         var userId = User.GetUserId();
-        var donation = await _donationService.CreateDonationAsync(dto, userId);
-        if (donation is null) return BadRequest("Error while creating donation");
+        var result = await _donationService.CreateDonationAsync(dto, userId);
 
-        return Ok(donation);
+        return result.Type switch
+        {
+            ResultType.Error => BadRequest("Error while creating donation"),
+            ResultType.Success => Ok(result),
+            _ => StatusCode(StatusCodes.Status500InternalServerError)
+        };
     }
 
     [Authorize]
-    [HttpGet("{id:long}")]
-    public async Task<IActionResult> GetDonationById(long id)
+    [HttpGet("{donationId:long}")]
+    public async Task<IActionResult> GetDonationById(long donationId)
     {
         var userId = User.GetUserId();
-        var donation = await _donationService.GetDonationByIdAsync(id, userId);
-        if (donation is null) return NotFound(new { message = $"Donation {id} not found." });
+        var result = await _donationService.GetDonationByIdAsync(donationId, userId);
         
-        return Ok(donation);
+        return result.Type switch
+        {
+            ResultType.NotFound => NotFound("Donation not found."),
+            ResultType.Success => Ok(result),
+            _ => StatusCode(StatusCodes.Status500InternalServerError)
+        };
     }
     
     [Authorize]
@@ -43,30 +52,47 @@ public class DonationController : ControllerBase
     public async Task<IActionResult> GetDonationList()
     {
         var userId = User.GetUserId();
-        var donations = await _donationService.GetDonationListAsync(userId);
+        var result = await _donationService.GetDonationListAsync(userId);
         
-        return Ok(donations);
+        return result?.Type switch
+        {
+            ResultType.Success => Ok(result),
+            _ => StatusCode(StatusCodes.Status500InternalServerError)
+        };
     }
 
 
     [Authorize]
-    [HttpPut("{id:long}")]
-    public async Task<IActionResult> UpdateDonationAsync(long id, [FromBody] UpdateDonationDto dto)
+    [HttpPut("{donationId:long}")]
+    public async Task<IActionResult> UpdateDonationAsync(long donationId, [FromBody] UpdateDonationDto dto)
     {
+        if (donationId != dto.DonationId)
+            return BadRequest();
+        
         var userId = User.GetUserId();
-        var updatedDonation = await _donationService.UpdateDonationAsync(dto, userId);
-
-        return Ok(updatedDonation);
+        var result = await _donationService.UpdateDonationAsync(dto, userId);
+        
+        return result.Type switch
+        {
+            ResultType.NotFound => NotFound(result),
+            ResultType.Error => NotFound(result),
+            ResultType.Success => Ok(result),
+            _ => StatusCode(StatusCodes.Status500InternalServerError)
+        };
     }
     
     [Authorize]
-    [HttpDelete("{id:long}")]
-    public async Task<IActionResult> DeleteDonation(long id)
+    [HttpDelete("{donationId:long}")]
+    public async Task<IActionResult> DeleteDonation(long donationId)
     {
         var userId = User.GetUserId();
-        var success = await _donationService.DeleteDonationAsync(id, userId);
-        if (!success) return NotFound($"Donation {id} not found.");
+        var result = await _donationService.DeleteDonationAsync(donationId, userId);
         
-        return NoContent();
+        return result.Type switch
+        {
+            ResultType.Error => BadRequest(result),
+            ResultType.Success => Ok(result),
+            _ => StatusCode(StatusCodes.Status500InternalServerError)
+        };
     }
 }
