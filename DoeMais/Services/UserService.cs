@@ -1,6 +1,7 @@
+using DoeMais.Common;
 using DoeMais.Domain.Entities;
+using DoeMais.Domain.Enums;
 using DoeMais.DTO.User;
-using DoeMais.Exceptions;
 using DoeMais.Extensions;
 using DoeMais.Repositories.Interfaces;
 using DoeMais.Services.Interfaces;
@@ -16,19 +17,22 @@ public class UserService : IUserService
         _userRepository = userRepository;
     }
 
-    public async Task<User?> GetByIdAsync(long id)
-    {
-        return await _userRepository.GetByIdAsync(id);
+    public async Task<Result<UserProfileDto?>> GetByIdAsync(long id)
+    { 
+        var result = await _userRepository.GetByIdAsync(id);
+        return result != null 
+            ? new Result<UserProfileDto?>(ResultType.Success, result.ToDto())
+            : new Result<UserProfileDto?>(ResultType.NotFound, result?.ToDto(), "User not found.");
     }
-    public async Task<User?> UpdateUserAsync(long userId, UpdateUserDto dto)
+    public async Task<Result<UserProfileDto?>> UpdateUserAsync(long userId, UpdateUserDto dto)
     {
         var user = await _userRepository.GetByIdAsync(userId);
-        if (user == null) throw new NotFoundException<User>();
+        if (user == null) return new Result<UserProfileDto?>(ResultType.NotFound, null, "User not found.");
 
         user.UpdateFromDto(dto);
         await _userRepository.UpdateAsync(user);
-        
-        return user;
+
+        return new Result<UserProfileDto?>(ResultType.Success, user.ToDto());
     }
 
 
