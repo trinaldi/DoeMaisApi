@@ -65,6 +65,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+builder.Services.AddAuthorization();
 builder.Services.AddAuthentication();
 builder.Services.AddAuthorizationBuilder()
     .AddPolicy("OwnerOrAdmin", policy => policy.Requirements.Add(new OwnerOrAdminRequirement()));
