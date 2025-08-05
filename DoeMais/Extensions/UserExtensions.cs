@@ -10,6 +10,7 @@ public static class UserExtensions
     {
         return new UserProfileDto
         {
+            UserId = user.UserId,
             AvatarUrl = user.AvatarUrl,
             Name = user.Name,
             Phone = user.Phone,

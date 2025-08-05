@@ -1,3 +1,5 @@
+using DoeMais.Common;
+using DoeMais.Domain.Enums;
 using DoeMais.DTO.Address;
 using DoeMais.Extensions;
 using DoeMais.Services.Interfaces;
@@ -22,9 +24,13 @@ public class AddressController : ControllerBase
     public async Task<IActionResult> GetAddresses()
     {
         var userId = User.GetUserId();
-        var addresses = await _addressService.GetAddressesAsync(userId);
-        
-        return Ok(addresses);
+        var result = await _addressService.GetAddressesAsync(userId);
+
+        return result.Type switch
+        {
+            ResultType.Success => Ok(result.Data),
+            _ => BadRequest("Something went wrong.")
+        };
     }
     
     [Authorize]
@@ -32,9 +38,14 @@ public class AddressController : ControllerBase
     public async Task<IActionResult> GetAddressById(long addressId)
     {
         var userId = User.GetUserId();
-        var address = await _addressService.GetAddressByIdAsync(addressId, userId);
-        
-        return Ok(address);
+        var result = await _addressService.GetAddressByIdAsync(addressId, userId);
+
+        return result.Type switch
+        {
+            ResultType.Success => Ok(result.Data),
+            ResultType.NotFound => NotFound(result.Message),
+            _ => BadRequest("Something went wrong.")
+        };
     }
 
     [Authorize]
@@ -42,9 +53,14 @@ public class AddressController : ControllerBase
     public async Task<IActionResult> CreateAddress([FromBody] AddressDto dto)
     {
         var userId = User.GetUserId();
-        var address = await _addressService.CreateAddressAsync(dto, userId);
-        
-        return Ok(address);
+        var result = await _addressService.CreateAddressAsync(dto, userId);
+
+        return result.Type switch
+        {
+            ResultType.Success => Ok(result.Data),
+            ResultType.Error => BadRequest(result.Message),
+            _ => BadRequest("Something went wrong.")
+        };
     }
     
     [Authorize]
@@ -52,9 +68,16 @@ public class AddressController : ControllerBase
     public async Task<IActionResult> UpdateAddress(long addressId, [FromBody]AddressDto dto)
     {
         var userId = User.GetUserId();
-        var address = await _addressService.UpdateAddressAsync(addressId, dto, userId);
-        
-        return Ok(address);
+        var result = await _addressService.UpdateAddressAsync(addressId, dto, userId);
+
+        return result.Type switch
+        {
+            ResultType.Success => Ok(result.Data),
+            ResultType.Error => BadRequest(result.Message),
+            ResultType.Mismatch => NotFound(result.Message),
+            _ => BadRequest("Something went wrong.")
+        };
+
     }
 
     [Authorize]
@@ -62,9 +85,13 @@ public class AddressController : ControllerBase
     public async Task<IActionResult> DeleteAddress(long addressId)
     {
         var userId = User.GetUserId();
-        var success = await _addressService.DeleteAddressAsync(addressId, userId);
-        if (!success) return NotFound($"Address {addressId} not found.");
-        
-        return NoContent();
+        var result = await _addressService.DeleteAddressAsync(addressId, userId);
+
+        return result.Type switch
+        {
+            ResultType.Success => NoContent(),
+            ResultType.Error => NotFound(result.Message),
+            _ => BadRequest("Something went wrong.")
+        };
     }
 }

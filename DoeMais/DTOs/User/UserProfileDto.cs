@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 public record UserProfileDto
 {
+    public long UserId { get; init; }
     public string? AvatarUrl { get; init; }
 
     [Required(ErrorMessage = "Name is required.")]

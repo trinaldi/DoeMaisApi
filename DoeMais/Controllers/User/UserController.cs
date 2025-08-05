@@ -1,3 +1,4 @@
+using DoeMais.Domain.Enums;
 using DoeMais.DTO.User;
 using DoeMais.Exceptions;
 using DoeMais.Extensions;
@@ -23,12 +24,15 @@ public class UserController : ControllerBase
     public async Task<IActionResult> Me()
     {
         var userId = User.GetUserId();
-        var user = await _userService.GetByIdAsync(userId);
-        if (user is null) return NotFound();
+        var result = await _userService.GetByIdAsync(userId);
 
-        var userProfileDto = user.ToDto();
+        return result.Type switch
+        {
+            ResultType.Success => Ok(result),
+            ResultType.NotFound => NotFound(result),
+            _ => StatusCode(StatusCodes.Status500InternalServerError, "Something went wrong"),
+        };
 
-        return Ok(userProfileDto);
     }
 
     [Authorize]
@@ -36,16 +40,13 @@ public class UserController : ControllerBase
     public async Task<IActionResult> UpdateProfile([FromBody] UpdateUserDto dto)
     {
         var userId = User.GetUserId();
-        try
+        var result = await _userService.UpdateUserAsync(userId, dto);
+           
+        return result.Type switch
         {
-            var updatedUser = await _userService.UpdateUserAsync(userId, dto);
-            var updatedUserDto = updatedUser?.ToUpdateUserDto();
-
-            return Ok(updatedUserDto);
-        }
-        catch (NotFoundException<Domain.Entities.User> e)
-        {
-            return NotFound(e.Message);
-        }
+            ResultType.Success => Ok(result),
+            ResultType.NotFound => NotFound(result),
+            _ => StatusCode(StatusCodes.Status500InternalServerError, "Something went wrong"),
+        };
     }
 }
