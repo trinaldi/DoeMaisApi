@@ -3,12 +3,15 @@ using DoeMais.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using DoeMais.Authorization.Handlers;
+using DoeMais.Authorization.Requirements;
 using DoeMais.Repositories;
 using DoeMais.Repositories.Interfaces;
 using DoeMais.Services;
 using DoeMais.Services.Interfaces;
 using DoeMais.Services.Utils;
 using DoeMais.Services.Interfaces.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -61,9 +64,15 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(key)
         };
     });
+
 builder.Services.AddAuthorization();
+builder.Services.AddAuthentication();
+builder.Services.AddAuthorizationBuilder()
+    .AddPolicy("OwnerOrAdmin", policy => policy.Requirements.Add(new OwnerOrAdminRequirement()));
+
 builder.Services.AddControllers();
 
+builder.Services.AddScoped<IAuthorizationHandler, OwnerOrAdminHandler>();
 builder.Services.AddScoped<TokenGeneratorService>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasherService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
