@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using DoeMais.Domain.Entities;
+using DoeMais.Domain.Enums;
 using DoeMais.DTO.User;
 using DoeMais.Exceptions;
 using DoeMais.Extensions;
@@ -7,6 +8,7 @@ using DoeMais.Repositories.Interfaces;
 using DoeMais.Services;
 using DoeMais.Tests.Domain;
 using DoeMais.Tests.Extensions;
+using DoeMais.Tests.Helpers;
 using Moq;
 
 namespace DoeMais.Tests.Services;
@@ -17,6 +19,7 @@ public class UserServiceTests
     private Mock<IUserRepository> _userRepositoryMock;
     private UserService _userService;
     private User _user;
+    private UserProfileDto _userProfileDto;
 
     [SetUp]
     public void Setup()
@@ -24,29 +27,34 @@ public class UserServiceTests
         _userRepositoryMock = new Mock<IUserRepository>();
         _userService = new UserService(_userRepositoryMock.Object);
         _user = FakeUser.Create().ToUser();
+        _userProfileDto = _user.ToDto();
     }
 
     [Test]
     public async Task GetByIdAsync_ShouldReturnUser_WhenUserExists()
     {
-        _userRepositoryMock.Setup(r => r.GetByIdAsync(_user.UserId))
+        var comparer = new RecordDeepEqualityComparer<UserProfileDto>();
+        _userRepositoryMock.Setup(r => r.GetByIdAsync(_userProfileDto.UserId))
             .ReturnsAsync(_user);
         
-        var result = await _userService.GetByIdAsync(_user.UserId);
+        var result = await _userService.GetByIdAsync(_userProfileDto.UserId);
         
-        Assert.That(result, Is.Not.Null);
-        Assert.That(result, Is.EqualTo(_user));
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Data, Is.EqualTo(_userProfileDto).Using(comparer));
+        });
     }
 
     [Test]
     public async Task GetByIdAsync_ShouldReturnNull_WhenUserDoesNotExist()
     {
-        _userRepositoryMock.Setup(r => r.GetByIdAsync(_user.UserId))
+        _userRepositoryMock.Setup(r => r.GetByIdAsync(_userProfileDto.UserId))
             .ReturnsAsync((User?)null);
         
-        var result = await _userService.GetByIdAsync(_user.UserId);
+        var result = await _userService.GetByIdAsync(_userProfileDto.UserId);
         
-        Assert.That(result, Is.Null);
+        Assert.That(result.Data, Is.Null);
     }
 
     [Test]
@@ -67,7 +75,7 @@ public class UserServiceTests
     }
 
     [Test]
-    public void PutAsync_ShouldReturnNull_WhenUserDoesNotExist()
+    public async Task PutAsync_ShouldReturnNull_WhenUserDoesNotExist()
     {
         const long userId = 123;
         var newName = Guid.NewGuid().ToString();
@@ -75,9 +83,13 @@ public class UserServiceTests
         
         _userRepositoryMock.Setup(r => r.GetByIdAsync(userId))
             .ReturnsAsync((User?)null);
+        var result = await _userService.UpdateUserAsync(_user.UserId, updateUserDto);
         
-        var ex = Assert.ThrowsAsync<NotFoundException<User>>(() => _userService.UpdateUserAsync(_user.UserId, updateUserDto));
-        Assert.That(ex!.Message, Is.EqualTo("User not found."));
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.Data, Is.Null);
+            Assert.That(result.Type, Is.Not.EqualTo(ResultType.Success));
+        });
     }
     
 }

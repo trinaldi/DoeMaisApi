@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System.Security.Claims;
+using DoeMais.Common;
+using DoeMais.Domain.Enums;
 using DoeMais.Exceptions;
 using DoeMais.Tests.Helpers;
 
@@ -19,11 +21,13 @@ public class UserControllerTests
     private Mock<IUserService> _userServiceMock;
     private UserController _userController;
     private User _user;
+    private UserProfileDto _userProfileDto;
 
     [SetUp]
     public void Setup()
     {
         _user = FakeUser.Create().ToUser();
+        _userProfileDto = _user.ToDto();
         _userServiceMock = new Mock<IUserService>();
         _userController = new UserController(_userServiceMock.Object);
         
@@ -40,18 +44,18 @@ public class UserControllerTests
     [Test]
     public async Task GetMe_ReturnsUser_WhenUserExistsAsync()
     {
-        var profileUserDto = _user.ToDto();
-        _userServiceMock.Setup(x => x.GetByIdAsync(_user.UserId)).ReturnsAsync(_user);
+        _userServiceMock.Setup(service => service.GetByIdAsync(_userProfileDto.UserId))
+            .ReturnsAsync(new Result<UserProfileDto?>(ResultType.Success, _userProfileDto));
 
         var result = await _userController.Me();
         var okObjectResult = (OkObjectResult)result;
-        var resultDto = okObjectResult.Value as UserProfileDto;
+        var resultDto = okObjectResult.Value as Result<UserProfileDto?>;
         
         Assert.Multiple(() =>
         {
             Assert.That(result, Is.InstanceOf<OkObjectResult>());
             Assert.That(okObjectResult.Value, Is.Not.Null);
-            Assert.That(profileUserDto, Is.EqualTo(resultDto).Using(new RecordDeepEqualityComparer<UserProfileDto>()));
+            Assert.That(_userProfileDto, Is.EqualTo(resultDto?.Data).Using(new RecordDeepEqualityComparer<UserProfileDto>()));
         });
         
     }
@@ -59,52 +63,50 @@ public class UserControllerTests
     [Test]
     public async Task GetMe_ReturnsNotFound_WhenUserDoesNotExist()
     {
-        _userServiceMock.Setup(x => x.GetByIdAsync(1))
-            .ReturnsAsync((User?)null);
+        _userServiceMock.Setup(service => service.GetByIdAsync(1))
+            .ReturnsAsync(new Result<UserProfileDto?>(ResultType.NotFound));
 
         var result = await _userController.Me();
 
-        Assert.That(result, Is.InstanceOf<NotFoundResult>());
+        Assert.That(result, Is.InstanceOf<NotFoundObjectResult>());
     }
 
     [Test]
-    public async Task UpdateProfile_ShouldUpdateUser_WhenNameChanges()
+    public async Task UpdateProfile_ShouldReturnOk_WhenUpdateSucceeds()
     {
-        var newName = Guid.NewGuid().ToString();
-        var updateUserDto = new UpdateUserDto { Name = newName };
-        var updatedUser = _user.Clone();
-        updatedUser.Name = newName;
-        
-        _userServiceMock.Setup(x => x.UpdateUserAsync(_user.UserId, updateUserDto))
-            .ReturnsAsync(updatedUser);
-       
-        var result = await _userController.UpdateProfile(updateUserDto);
-        var resultDto = result as OkObjectResult;
-        var resultDtoValue = resultDto?.Value as UpdateUserDto;
-       
+        var dto = new UpdateUserDto { Name = $"{Guid.NewGuid().ToString()}" };
+        var resultFromService = new Result<UserProfileDto?>(ResultType.Success, new UserProfileDto { Name = dto.Name });
+
+        _userServiceMock.Setup(s => s.UpdateUserAsync(_userProfileDto.UserId, dto))
+            .ReturnsAsync(resultFromService);
+
+        var actionResult = await _userController.UpdateProfile(dto);
+        var okResult = actionResult as OkObjectResult;
+
         Assert.Multiple(() =>
         {
-            Assert.That(result, Is.TypeOf<OkObjectResult>());
-            Assert.That(resultDtoValue?.Name, Is.EqualTo(updateUserDto.Name));
+            Assert.That(actionResult, Is.TypeOf<OkObjectResult>());
+            Assert.That(okResult?.Value, Is.EqualTo(resultFromService));
         });
-        _userServiceMock.Verify(x => x.UpdateUserAsync(_user.UserId, updateUserDto), Times.Once);
     }
 
     [Test]
     public async Task UpdateProfile_ReturnsNotFound_WhenUserDoesNotExist()
     {
-        var updateUserDto = _user.ToUpdateUserDto();
-        _userServiceMock.Setup(s => s.UpdateUserAsync(It.IsAny<long>(), updateUserDto))
-            .ThrowsAsync(new NotFoundException<User>());
+        var dto = new UpdateUserDto { Name = $"{Guid.NewGuid().ToString()}" };
+        var notFoundResult = new Result<UserProfileDto?>(ResultType.NotFound, null, "User not found."); 
         
-        var result = await _userController.UpdateProfile(updateUserDto);
-        var notFoundResult = result as NotFoundObjectResult;
+        _userServiceMock.Setup(s => s.UpdateUserAsync(_userProfileDto.UserId, dto))
+            .ReturnsAsync(notFoundResult);
+
+        
+        var actionResult = await _userController.UpdateProfile(dto);
+        var notFoundObjectResult = actionResult as NotFoundObjectResult;
         
         Assert.Multiple(() =>
         {
-            Assert.That(result, Is.InstanceOf<NotFoundObjectResult>());
-            Assert.That(notFoundResult?.Value, Is.EqualTo("User not found."));
-            Assert.That(notFoundResult?.StatusCode, Is.EqualTo(404));
+            Assert.That(actionResult, Is.TypeOf<NotFoundObjectResult>());
+            Assert.That(notFoundObjectResult?.Value, Is.EqualTo(notFoundResult));
         });
 
 
