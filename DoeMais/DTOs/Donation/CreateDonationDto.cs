@@ -5,6 +5,7 @@ namespace DoeMais.DTO.Donation;
 
 public record CreateDonationDto
 {
+    public long UserId { get; init; }
     public long AddressId { get; init; }
     
     [Required]

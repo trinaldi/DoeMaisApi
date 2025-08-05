@@ -10,8 +10,8 @@ public static class DonationExtension
         return new DonationDto
         {
             DonationId = donation.DonationId,
-            Address = donation.Address.ToDto(),
-            User = donation.User.ToDto(),
+            AddressId = donation.AddressId,
+            UserId = donation.UserId,
             Title = donation.Title,
             Description = donation.Description,
             Quantity = donation.Quantity,

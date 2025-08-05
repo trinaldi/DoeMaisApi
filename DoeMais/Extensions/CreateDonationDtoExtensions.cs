@@ -5,11 +5,11 @@ namespace DoeMais.Extensions;
 
 public static class CreateDonationDtoExtensions
 {
-    public static Donation ToEntity(this CreateDonationDto dto, long userId)
+    public static Donation ToEntity(this CreateDonationDto dto)
     {
         return new Donation
         {
-            UserId = userId,
+            UserId = dto.UserId,
             AddressId = dto.AddressId,
             Title = dto.Title,
             Description = dto.Description ?? "",

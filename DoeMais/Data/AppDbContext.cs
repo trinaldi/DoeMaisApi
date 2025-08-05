@@ -2,13 +2,22 @@ using DoeMais.Domain;
 using Microsoft.EntityFrameworkCore;
 using DoeMais.Domain.Entities;
 using DoeMais.Domain.ValueObjects;
+using DoeMais.Services.Query;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DoeMais.Data;
 
 public class AppDbContext : DbContext
 {
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+    private readonly ICurrentUserService _currentUserService;
+
+    public AppDbContext(DbContextOptions<AppDbContext> options, ICurrentUserService currentUserService)
+        : base(options)
+    {
+        _currentUserService = currentUserService;
+    }
+    
+    
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -42,6 +51,9 @@ public class AppDbContext : DbContext
                 .HasColumnName("Cpf")
                 .HasMaxLength(11);
         });
+        
+        modelBuilder.Entity<Address>().HasQueryFilter(a => a.UserId == _currentUserService.UserId);
+        modelBuilder.Entity<Donation>().HasQueryFilter(d => d.UserId == _currentUserService.UserId);
         
         modelBuilder.Entity<User>()
             .HasMany(u => u.Addresses)
@@ -100,7 +112,7 @@ public class AppDbContext : DbContext
     private void UpdateTimestamps()
     {
         var entries = ChangeTracker.Entries()
-            .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified);
+            .Where(e => e.State is EntityState.Added or EntityState.Modified);
 
         foreach (var entry in entries)
         {

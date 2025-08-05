@@ -5,12 +5,14 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using DoeMais.Authorization.Handlers;
 using DoeMais.Authorization.Requirements;
+using DoeMais.Data.Interceptors;
 using DoeMais.Repositories;
 using DoeMais.Repositories.Interfaces;
 using DoeMais.Services;
 using DoeMais.Services.Interfaces;
 using DoeMais.Services.Utils;
 using DoeMais.Services.Interfaces.Utils;
+using DoeMais.Services.Query;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.OpenApi.Models;
 
@@ -46,8 +48,12 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<AppDbContext>(( serviceProvider, options) =>
+{
+    var interceptor = serviceProvider.GetRequiredService<UserIdSaveChangesInterceptor>();
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.AddInterceptors(interceptor);
+});
 
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -71,7 +77,9 @@ builder.Services.AddAuthorizationBuilder()
     .AddPolicy("OwnerOrAdmin", policy => policy.Requirements.Add(new OwnerOrAdminRequirement()));
 
 builder.Services.AddControllers();
-
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<UserIdSaveChangesInterceptor>();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<IAuthorizationHandler, OwnerOrAdminHandler>();
 builder.Services.AddScoped<TokenGeneratorService>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasherService>();

@@ -1,9 +1,10 @@
 using DoeMais.Domain.Enums;
 using System.Collections.Generic;
+using DoeMais.Domain.Interfaces;
 
 namespace DoeMais.Domain.Entities;
 
-public class Donation
+public class Donation : IUserOwned
 {
     public long DonationId { get; set; }
     public long UserId { get; set; }
