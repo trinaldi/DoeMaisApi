@@ -1,8 +1,6 @@
 using DoeMais.Common;
-using DoeMais.Domain.Entities;
 using DoeMais.Domain.Enums;
 using DoeMais.DTO.Donation;
-using DoeMais.Exceptions;
 using DoeMais.Extensions;
 using DoeMais.Repositories.Interfaces;
 using DoeMais.Services.Interfaces;
@@ -41,7 +39,7 @@ public class DonationService : IDonationService
         
         return donation == null 
             ? new Result<DonationDto?>(ResultType.NotFound, null, "No donation found.") 
-            : new Result<DonationDto?>(ResultType.Success, donation?.ToDto());
+            : new Result<DonationDto?>(ResultType.Success, donation.ToDto());
     }
 
     public async Task<Result<DonationDto?>> UpdateDonationAsync(UpdateDonationDto donation)

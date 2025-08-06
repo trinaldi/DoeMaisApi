@@ -1,6 +1,6 @@
 using System.Collections;
 
-namespace DoeMais.Tests.Helpers;
+namespace DoeMais.Tests.Helpers.Asserts;
 
 public class RecordDeepEqualityComparer<T> : IEqualityComparer<T>
 {

@@ -23,8 +23,7 @@ public class AddressController : ControllerBase
     [HttpGet("all")]
     public async Task<IActionResult> GetAddresses()
     {
-        var userId = User.GetUserId();
-        var result = await _addressService.GetAddressesAsync(userId);
+        var result = await _addressService.GetAddressesAsync();
 
         return result.Type switch
         {
@@ -37,8 +36,7 @@ public class AddressController : ControllerBase
     [HttpGet("{addressId:long}")]
     public async Task<IActionResult> GetAddressById(long addressId)
     {
-        var userId = User.GetUserId();
-        var result = await _addressService.GetAddressByIdAsync(addressId, userId);
+        var result = await _addressService.GetAddressByIdAsync(addressId);
 
         return result.Type switch
         {
@@ -52,8 +50,7 @@ public class AddressController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateAddress([FromBody] AddressDto dto)
     {
-        var userId = User.GetUserId();
-        var result = await _addressService.CreateAddressAsync(dto, userId);
+        var result = await _addressService.CreateAddressAsync(dto);
 
         return result.Type switch
         {
@@ -67,8 +64,7 @@ public class AddressController : ControllerBase
     [HttpPut("{addressId:long}")]
     public async Task<IActionResult> UpdateAddress(long addressId, [FromBody]AddressDto dto)
     {
-        var userId = User.GetUserId();
-        var result = await _addressService.UpdateAddressAsync(addressId, dto, userId);
+        var result = await _addressService.UpdateAddressAsync(addressId, dto);
 
         return result.Type switch
         {
@@ -84,8 +80,7 @@ public class AddressController : ControllerBase
     [HttpDelete("{addressId:long}")]
     public async Task<IActionResult> DeleteAddress(long addressId)
     {
-        var userId = User.GetUserId();
-        var result = await _addressService.DeleteAddressAsync(addressId, userId);
+        var result = await _addressService.DeleteAddressAsync(addressId);
 
         return result.Type switch
         {

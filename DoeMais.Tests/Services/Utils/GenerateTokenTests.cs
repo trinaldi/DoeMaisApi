@@ -22,7 +22,7 @@ public class GenerateTokenTests
     {
         _jwtKey = Guid.NewGuid().ToString();
         _issuer = "DoeMaisApiTests";
-        _user = FakeUser.Create().ToUser();
+        _user = FakeUser.Create().ToEntity();
 
         var inMemorySettings = new Dictionary<string, string?>
         {

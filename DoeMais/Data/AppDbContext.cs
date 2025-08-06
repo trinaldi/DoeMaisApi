@@ -1,3 +1,4 @@
+using DoeMais.Data.Interceptors;
 using DoeMais.Domain;
 using Microsoft.EntityFrameworkCore;
 using DoeMais.Domain.Entities;
@@ -10,14 +11,25 @@ namespace DoeMais.Data;
 public class AppDbContext : DbContext
 {
     private readonly ICurrentUserService _currentUserService;
-
+    private readonly UserIdSaveChangesInterceptor _userIdInterceptor;
+    
+    public AppDbContext()
+    {
+        
+    }
     public AppDbContext(DbContextOptions<AppDbContext> options, ICurrentUserService currentUserService)
         : base(options)
     {
         _currentUserService = currentUserService;
+        _userIdInterceptor = new UserIdSaveChangesInterceptor(_currentUserService);
     }
-    
-    
+
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.AddInterceptors(_userIdInterceptor);
+        base.OnConfiguring(optionsBuilder);
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -125,9 +137,12 @@ public class AppDbContext : DbContext
         }
     }
     
-    public DbSet<User> Users => Set<User>();
-    public DbSet<Address> Addresses => Set<Address>();
-    public DbSet<Role> Roles => Set<Role>();
-    public DbSet<UserRole> UserRoles => Set<UserRole>();
-    public DbSet<Donation> Donations => Set<Donation>();
+    
+    // I've set these to virtual because of the tests. Mocks need these
+    // properties to be set as `virtual`, there is no lazy loading here.
+    public virtual DbSet<User> Users => Set<User>();
+    public virtual DbSet<Address> Addresses => Set<Address>();
+    public virtual DbSet<Role> Roles => Set<Role>();
+    public virtual DbSet<UserRole> UserRoles => Set<UserRole>();
+    public virtual DbSet<Donation> Donations => Set<Donation>();
 }
