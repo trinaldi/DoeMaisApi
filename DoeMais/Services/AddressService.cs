@@ -1,6 +1,6 @@
 using DoeMais.Common;
 using DoeMais.Domain.Enums;
-using DoeMais.DTO.Address;
+using DoeMais.DTOs.Address;
 using DoeMais.Extensions;
 using DoeMais.Repositories.Interfaces;
 using DoeMais.Services.Interfaces;
@@ -32,6 +32,9 @@ public class AddressService : IAddressService
 
     public async Task<Result<AddressDto?>> CreateAddressAsync(AddressDto dto)
     {
+        if(string.IsNullOrWhiteSpace(dto.Street))
+            throw new ArgumentNullException(nameof(dto.Street), "Street is required.");
+
         var address = dto.ToEntity();
         var result = await _addressRepository.CreateAddressAsync(address);
         return result == null

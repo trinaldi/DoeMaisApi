@@ -1,5 +1,5 @@
 using DoeMais.Controllers.User;
-using DoeMais.DTO.User;
+using DoeMais.DTOs.User;
 using DoeMais.Domain.Entities;
 using DoeMais.Extensions;
 using DoeMais.Services.Interfaces;

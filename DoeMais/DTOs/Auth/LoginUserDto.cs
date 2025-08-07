@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace DoeMais.DTO.Auth;
+namespace DoeMais.DTOs.Auth;
 
 public record LoginUserDto
 {

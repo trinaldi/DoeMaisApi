@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using DoeMais.Data;
 using DoeMais.Domain.Entities;
-using DoeMais.DTO.Address;
+using DoeMais.DTOs.Address;
 using DoeMais.Extensions;
 using DoeMais.Repositories;
 using DoeMais.Repositories.Interfaces;
@@ -103,13 +103,6 @@ namespace DoeMais.Tests.Repositories
                 Assert.That(result, Is.Not.Null);
                 Assert.That(result?.Street, Is.EqualTo(address.Street));
             });
-        }
-
-        [Test]
-        public void CreateAddressAsync_ShouldThrowArgumentNullException_WhenAddressIsNull()
-        {
-            Address? nullAddress = null;
-            Assert.ThrowsAsync<ArgumentNullException>(async () => await _repository.CreateAddressAsync(nullAddress));
         }
 
         [Test]

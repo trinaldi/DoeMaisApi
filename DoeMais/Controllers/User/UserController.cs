@@ -1,5 +1,5 @@
 using DoeMais.Domain.Enums;
-using DoeMais.DTO.User;
+using DoeMais.DTOs.User;
 using DoeMais.Exceptions;
 using DoeMais.Extensions;
 using DoeMais.Services.Interfaces;

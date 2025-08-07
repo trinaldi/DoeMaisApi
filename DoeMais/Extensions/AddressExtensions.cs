@@ -1,5 +1,5 @@
 using DoeMais.Domain.Entities;
-using DoeMais.DTO.Address;
+using DoeMais.DTOs.Address;
 
 namespace DoeMais.Extensions;
 
@@ -74,6 +74,7 @@ public static class AddressExtensions
             State = address.State ?? "",
             ZipCode = address.ZipCode ?? "",
             IsPrimary = address.IsPrimary,
+            Donations = address.Donations
         };
     }
     

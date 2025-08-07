@@ -31,8 +31,6 @@ public class AddressRepository : IAddressRepository
 
     public async Task<Address> CreateAddressAsync(Address address)
     {
-        ArgumentNullException.ThrowIfNull(address);
-
         _ctx.Addresses.Add(address);
         await _ctx.SaveChangesAsync();
         

@@ -1,6 +1,6 @@
 using DoeMais.Common;
 using DoeMais.Domain.Enums;
-using DoeMais.DTO.Address;
+using DoeMais.DTOs.Address;
 using DoeMais.Extensions;
 using DoeMais.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;

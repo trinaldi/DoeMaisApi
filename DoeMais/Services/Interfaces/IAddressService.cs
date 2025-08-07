@@ -1,5 +1,5 @@
 using DoeMais.Common;
-using DoeMais.DTO.Address;
+using DoeMais.DTOs.Address;
 
 namespace DoeMais.Services.Interfaces;
 

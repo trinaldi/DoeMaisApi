@@ -1,9 +1,9 @@
 using System.Net.Mime;
 using DoeMais.Domain.Enums;
-using DoeMais.DTO.Address;
-using DoeMais.DTO.User;
+using DoeMais.DTOs.Address;
+using DoeMais.DTOs.User;
 
-namespace DoeMais.DTO.Donation;
+namespace DoeMais.DTOs.Donation;
 
 public record DonationDto
 {

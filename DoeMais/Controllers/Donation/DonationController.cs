@@ -1,5 +1,5 @@
 using DoeMais.Domain.Enums;
-using DoeMais.DTO.Donation;
+using DoeMais.DTOs.Donation;
 using DoeMais.Extensions;
 using DoeMais.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;

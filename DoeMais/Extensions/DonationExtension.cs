@@ -1,5 +1,5 @@
 using DoeMais.Domain.Entities;
-using DoeMais.DTO.Donation;
+using DoeMais.DTOs.Donation;
 
 namespace DoeMais.Extensions;
 

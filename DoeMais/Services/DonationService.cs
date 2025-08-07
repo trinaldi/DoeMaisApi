@@ -1,6 +1,6 @@
 using DoeMais.Common;
 using DoeMais.Domain.Enums;
-using DoeMais.DTO.Donation;
+using DoeMais.DTOs.Donation;
 using DoeMais.Extensions;
 using DoeMais.Repositories.Interfaces;
 using DoeMais.Services.Interfaces;
