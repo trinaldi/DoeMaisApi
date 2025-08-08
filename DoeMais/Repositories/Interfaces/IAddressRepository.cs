@@ -10,4 +10,6 @@ public interface IAddressRepository
     Task<Address> CreateAddressAsync(Address address);
     Task<Address?> UpdateAddressAsync(long addressId, Address address);
     Task<bool> DeleteAddressAsync(long addressId);
+
+    Task ClearPrimaryAddressAsync();
 }

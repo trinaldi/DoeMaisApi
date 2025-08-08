@@ -35,6 +35,9 @@ public class AddressService : IAddressService
         if(string.IsNullOrWhiteSpace(dto.Street))
             throw new ArgumentNullException(nameof(dto.Street), "Street is required.");
 
+        if (dto.IsPrimary)
+            await _addressRepository.ClearPrimaryAddressAsync();
+
         var address = dto.ToEntity();
         var result = await _addressRepository.CreateAddressAsync(address);
         return result == null
@@ -58,4 +61,5 @@ public class AddressService : IAddressService
         var success = await _addressRepository.DeleteAddressAsync(addressId);
         return success ? new Result<bool>(ResultType.Success, success) : new Result<bool>(ResultType.NotFound, success); 
     }
+
 }
