@@ -1,4 +1,5 @@
 using DoeMais.Domain.Entities;
+using DoeMais.Domain.Enums;
 using DoeMais.DTOs.Address;
 using DoeMais.Extensions;
 using DoeMais.Repositories.Interfaces;
@@ -164,6 +165,25 @@ public class AddressServiceTests
             Assert.That(result, Is.Not.Null);
             Assert.That(result.Data, Is.EqualTo(false));
         });
+    }
+
+    [Test]
+    public async Task CreateAddressAsync_ShouldSetIsPrimary_WhenAPrimaryAddressIsInserted()
+    {
+        var primaryAddress = FakeAddress.Create();
+        primaryAddress.IsPrimary = true;
+        var primaryAddressDto = primaryAddress.ToDto();
+        _addressRepositoryMock.Setup(r => r.ClearPrimaryAddressAsync())
+            .Returns(Task.CompletedTask);
+        _addressRepositoryMock.Setup(r => r.CreateAddressAsync(It.IsAny<Address>()))
+            .ReturnsAsync(new Address());
+
+        var result = await _addressService.CreateAddressAsync(primaryAddressDto);
+        
+        Assert.That(result.Type, Is.EqualTo(ResultType.Success));
+        _addressRepositoryMock.Verify(r => r.ClearPrimaryAddressAsync(), Times.Once);
+        _addressRepositoryMock.Verify(r => r.CreateAddressAsync(It.IsAny<Address>()), Times.Once);
+
     }
     
 }
