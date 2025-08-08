@@ -61,4 +61,14 @@ public class AddressRepository : IAddressRepository
         
         return true;
     }
+    
+    public async Task ClearPrimaryAddressAsync()
+    {
+        var primaries = await _ctx.Addresses.Where(a => a.IsPrimary).ToListAsync();
+        foreach (var addr in primaries)
+        {
+            addr.IsPrimary = false;
+        }
+        await _ctx.SaveChangesAsync();
+    }
 }
