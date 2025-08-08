@@ -1,7 +1,7 @@
 using NUnit.Framework;
 using DoeMais.Domain.Entities;
 using DoeMais.Domain.Enums;
-using DoeMais.DTO.User;
+using DoeMais.DTOs.User;
 using DoeMais.Exceptions;
 using DoeMais.Extensions;
 using DoeMais.Repositories.Interfaces;
@@ -9,6 +9,7 @@ using DoeMais.Services;
 using DoeMais.Tests.Domain;
 using DoeMais.Tests.Extensions;
 using DoeMais.Tests.Helpers;
+using DoeMais.Tests.Helpers.Asserts;
 using Moq;
 
 namespace DoeMais.Tests.Services;
@@ -26,7 +27,7 @@ public class UserServiceTests
     {
         _userRepositoryMock = new Mock<IUserRepository>();
         _userService = new UserService(_userRepositoryMock.Object);
-        _user = FakeUser.Create().ToUser();
+        _user = FakeUser.Create().ToEntity();
         _userProfileDto = _user.ToDto();
     }
 

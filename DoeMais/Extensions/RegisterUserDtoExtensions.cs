@@ -1,4 +1,4 @@
-using DoeMais.DTO.Auth;
+using DoeMais.DTOs.Auth;
 using DoeMais.Domain.Entities;
 using DoeMais.Domain.ValueObjects;
 using DoeMais.Services.Interfaces.Utils;

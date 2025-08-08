@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using DoeMais.Domain.ValueObjects;
 
-namespace DoeMais.DTO.Auth;
+namespace DoeMais.DTOs.Auth;
 
 public record RegisterUserDto
 {

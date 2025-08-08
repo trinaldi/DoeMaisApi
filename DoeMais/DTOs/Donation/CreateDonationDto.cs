@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using DoeMais.Domain.Enums;
 
-namespace DoeMais.DTO.Donation;
+namespace DoeMais.DTOs.Donation;
 
 public record CreateDonationDto
 {

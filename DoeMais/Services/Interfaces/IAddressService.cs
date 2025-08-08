@@ -1,13 +1,13 @@
 using DoeMais.Common;
-using DoeMais.DTO.Address;
+using DoeMais.DTOs.Address;
 
 namespace DoeMais.Services.Interfaces;
 
 public interface IAddressService
 {
-    Task<Result<List<AddressDto>?>> GetAddressesAsync(long userId);
-    Task<Result<AddressDto>> GetAddressByIdAsync(long addressId, long userId);
-    Task<Result<AddressDto?>> CreateAddressAsync(AddressDto dto, long userId);
-    Task<Result<AddressDto?>> UpdateAddressAsync(long addressId, AddressDto dto, long userId);
-    Task<Result<bool>> DeleteAddressAsync(long addressId, long userId);
+    Task<Result<List<AddressDto>?>> GetAddressesAsync();
+    Task<Result<AddressDto>> GetAddressByIdAsync(long addressId);
+    Task<Result<AddressDto?>> CreateAddressAsync(AddressDto dto);
+    Task<Result<AddressDto?>> UpdateAddressAsync(long addressId, AddressDto dto);
+    Task<Result<bool>> DeleteAddressAsync(long addressId);
 }

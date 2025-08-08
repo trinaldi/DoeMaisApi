@@ -1,5 +1,5 @@
 using DoeMais.Domain.Entities;
-using DoeMais.DTO.Address;
+using DoeMais.DTOs.Address;
 
 namespace DoeMais.Extensions;
 
@@ -57,5 +57,26 @@ public static class AddressExtensions
         target.ZipCode = source.ZipCode;
         target.IsPrimary = source.IsPrimary;
     }
+    
+    public static Address Clone(this Address? address)
+    {
+        if (address == null)
+            return null;
+
+        return new Address
+        {
+            AddressId = address.AddressId,
+            UserId = address.UserId,
+            Street = address.Street ?? "",
+            Complement = address.Complement,
+            Neighborhood = address.Neighborhood ?? "",
+            City = address.City ?? "",
+            State = address.State ?? "",
+            ZipCode = address.ZipCode ?? "",
+            IsPrimary = address.IsPrimary,
+            Donations = address.Donations
+        };
+    }
+    
 
 }

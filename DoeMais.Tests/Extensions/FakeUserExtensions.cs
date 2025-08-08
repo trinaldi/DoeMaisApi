@@ -6,7 +6,7 @@ namespace DoeMais.Tests.Extensions;
 
 public static class FakeUserExtensions
 {
-    public static User ToUser(this FakeUser fake)
+    public static User ToEntity(this FakeUser fake)
     {
         var user = new User
         {

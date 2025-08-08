@@ -1,7 +1,7 @@
 using DoeMais.Common;
 using DoeMais.Domain.Entities;
 using DoeMais.Domain.Enums;
-using DoeMais.DTO.User;
+using DoeMais.DTOs.User;
 using DoeMais.Extensions;
 using DoeMais.Repositories.Interfaces;
 using DoeMais.Services.Interfaces;

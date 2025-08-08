@@ -1,6 +1,6 @@
-using DoeMais.DTO.Address;
+using DoeMais.DTOs.Address;
 
-namespace DoeMais.DTO.User;
+namespace DoeMais.DTOs.User;
 
 using System.ComponentModel.DataAnnotations;
 

@@ -31,4 +31,25 @@ public class UserIdSaveChangesInterceptor : SaveChangesInterceptor
 
         return base.SavingChanges(eventData, result);
     }
+    
+    public override async ValueTask<InterceptionResult<int>> SavingChangesAsync(
+        DbContextEventData eventData,
+        InterceptionResult<int> result,
+        CancellationToken cancellationToken = default)
+    {
+        var context = eventData.Context;
+        if (context != null)
+        {
+            var entries = context.ChangeTracker.Entries()
+                .Where(e => e.State is EntityState.Added or EntityState.Modified
+                            && e.Entity is IUserOwned);
+
+            foreach (var entry in entries)
+            {
+                var entity = (IUserOwned)entry.Entity;
+                entity.UserId = _currentUserService.UserId;
+            }
+        }
+        return await base.SavingChangesAsync(eventData, result, cancellationToken);
+    }
 }

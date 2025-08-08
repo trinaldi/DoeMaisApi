@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
-using DoeMais.DTO.Address;
+using DoeMais.DTOs.Address;
 
-namespace DoeMais.DTO.User;
+namespace DoeMais.DTOs.User;
 
 public record UpdateUserDto
 {

@@ -1,5 +1,5 @@
 using DoeMais.Controllers.User;
-using DoeMais.DTO.User;
+using DoeMais.DTOs.User;
 using DoeMais.Domain.Entities;
 using DoeMais.Extensions;
 using DoeMais.Services.Interfaces;
@@ -13,6 +13,7 @@ using DoeMais.Common;
 using DoeMais.Domain.Enums;
 using DoeMais.Exceptions;
 using DoeMais.Tests.Helpers;
+using DoeMais.Tests.Helpers.Asserts;
 
 namespace DoeMais.Tests.Controllers;
 
@@ -26,7 +27,7 @@ public class UserControllerTests
     [SetUp]
     public void Setup()
     {
-        _user = FakeUser.Create().ToUser();
+        _user = FakeUser.Create().ToEntity();
         _userProfileDto = _user.ToDto();
         _userServiceMock = new Mock<IUserService>();
         _userController = new UserController(_userServiceMock.Object);

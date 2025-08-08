@@ -1,5 +1,5 @@
 using DoeMais.Common;
-using DoeMais.DTO.Donation;
+using DoeMais.DTOs.Donation;
 
 namespace DoeMais.Services.Interfaces;
 

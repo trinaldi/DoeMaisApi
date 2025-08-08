@@ -30,7 +30,7 @@ namespace DoeMais.Tests.Repositories
                 .Options;
             _context = new AppDbContext(_options, _mockCurrentUserService.Object);
             _userRepository = new UserRepository(_context);
-            _user = FakeUser.Create().ToUser();
+            _user = FakeUser.Create().ToEntity();
             await _context.Users.AddAsync(_user);
             await _context.SaveChangesAsync();
             

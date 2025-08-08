@@ -15,42 +15,32 @@ public class AddressRepository : IAddressRepository
         _ctx = ctx;
     }
     
-    public async Task<List<Address>?> GetAddressesAsync(long userId)
+    public async Task<List<Address>?> GetAddressesAsync()
     {
         return await _ctx.Addresses
-            .Where(a => a.UserId == userId)
             .OrderByDescending(a => a.IsPrimary)
             .ToListAsync();
     }
 
-    public async Task<Address?> GetAddressByIdAsync(long addressId, long userId)
+    public async Task<Address?> GetAddressByIdAsync(long addressId)
     {
         return await _ctx.Addresses
-            .Where(a => a.UserId == userId && a.AddressId == addressId)
+            .Where(a => a.AddressId == addressId)
             .FirstOrDefaultAsync();
     }
 
-    public async Task<Address?> CreateAddressAsync(Address address, long userId)
+    public async Task<Address> CreateAddressAsync(Address address)
     {
-        var user =  await _ctx.Users
-            .Include(u => u.Addresses)
-            .FirstOrDefaultAsync(u => u.UserId == userId);
-        if (user is null) return null;
-
-        user.Addresses.Add(address);
+        _ctx.Addresses.Add(address);
         await _ctx.SaveChangesAsync();
         
         return address;
     }
 
-    public async Task<Address?> UpdateAddressAsync(long addressId, Address address, long userId)
+    public async Task<Address?> UpdateAddressAsync(long addressId, Address address)
     {
-        var user = await _ctx.Users
-            .Include(u => u.Addresses)
-            .FirstOrDefaultAsync(u => u.UserId == userId);
-        if (user is null) return null;
-
-        var existingAddress = user.Addresses.FirstOrDefault(a => a.AddressId == addressId);
+        var existingAddress = await _ctx.Addresses
+            .FirstOrDefaultAsync(a => a.AddressId == addressId);
         if (existingAddress is null) return null;
         
         existingAddress.UpdateFrom(address);
@@ -59,10 +49,10 @@ public class AddressRepository : IAddressRepository
         return existingAddress;
     }
 
-    public async Task<bool> DeleteAddressAsync(long addressId, long userId)
+    public async Task<bool> DeleteAddressAsync(long addressId)
     {
         var address = await _ctx.Addresses
-            .Where(d => d.AddressId == addressId && d.UserId == userId)
+            .Where(d => d.AddressId == addressId)
             .FirstOrDefaultAsync();
         if (address == null) return false;
         
@@ -70,6 +60,5 @@ public class AddressRepository : IAddressRepository
         await _ctx.SaveChangesAsync();
         
         return true;
-
     }
 }

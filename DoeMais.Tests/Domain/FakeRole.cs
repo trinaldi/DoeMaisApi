@@ -4,7 +4,7 @@ namespace DoeMais.Tests.Domain;
 
 public class FakeRole
 {
-    public Int64 RoleId { get; set; }
+    public long RoleId { get; set; }
     public string? Name { get; private set; }
 
     public ICollection<FakeUserRole> FakeUserRoles { get; set; } = new List<FakeUserRole>();
