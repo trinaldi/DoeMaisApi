@@ -33,7 +33,6 @@ public class FakeAddress
     {
         var faker = new Faker<FakeAddress>("pt_BR")
             .RuleFor(u => u.AddressId, f => addressId ?? f.Random.Long(1000, 99999))
-            .RuleFor(u => u.AddressId, f => addressId ?? f.Random.Long(1000, 99999))
             .RuleFor(u => u.Street, f => f.Address.StreetAddress())
             .RuleFor(u => u.Complement, f => f.Random.Bool(0.5f) ? f.Address.SecondaryAddress() : null)
             .RuleFor(u => u.Neighborhood, f => f.Address.County())
