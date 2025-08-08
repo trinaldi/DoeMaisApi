@@ -27,7 +27,7 @@ public class AddressController : ControllerBase
 
         return result.Type switch
         {
-            ResultType.Success => Ok(result.Data),
+            ResultType.Success => Ok(result),
             _ => BadRequest("Something went wrong.")
         };
     }
@@ -40,8 +40,8 @@ public class AddressController : ControllerBase
 
         return result.Type switch
         {
-            ResultType.Success => Ok(result.Data),
-            ResultType.NotFound => NotFound(result.Message),
+            ResultType.Success => Ok(result),
+            ResultType.NotFound => NotFound(result),
             _ => BadRequest("Something went wrong.")
         };
     }
@@ -54,8 +54,8 @@ public class AddressController : ControllerBase
 
         return result.Type switch
         {
-            ResultType.Success => Ok(result.Data),
-            ResultType.Error => BadRequest(result.Message),
+            ResultType.Success => Ok(result),
+            ResultType.Error => BadRequest(result),
             _ => BadRequest("Something went wrong.")
         };
     }
@@ -68,9 +68,9 @@ public class AddressController : ControllerBase
 
         return result.Type switch
         {
-            ResultType.Success => Ok(result.Data),
-            ResultType.Error => BadRequest(result.Message),
-            ResultType.Mismatch => NotFound(result.Message),
+            ResultType.Success => Ok(result),
+            ResultType.Error => BadRequest(result),
+            ResultType.Mismatch => NotFound(result),
             _ => BadRequest("Something went wrong.")
         };
 
@@ -84,8 +84,8 @@ public class AddressController : ControllerBase
 
         return result.Type switch
         {
-            ResultType.Success => NoContent(),
-            ResultType.Error => NotFound(result.Message),
+            ResultType.Success => Ok(result),
+            ResultType.Error => NotFound(result),
             _ => BadRequest("Something went wrong.")
         };
     }
