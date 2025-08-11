@@ -14,7 +14,7 @@ public class FakeAddress
     public bool IsPrimary { get; set; } = true;
     public ICollection<FakeDonation> FakeDonations { get; set; } = new List<FakeDonation>();
     
-    public static FakeAddress Create(int? addressId = null, int qty = 1)
+    public static FakeAddress Create(long? addressId = null, int qty = 1)
     {
         var faker = new Faker<FakeAddress>("pt_BR")
             .RuleFor(u => u.AddressId, f => addressId ?? f.Random.Long(1000, 99999))
@@ -29,7 +29,7 @@ public class FakeAddress
         return faker.Generate();
     }
     
-    public static List<FakeAddress> CreateMany(int? addressId = null, int qty = 1)
+    public static List<FakeAddress> CreateMany(long? addressId = null, int qty = 1)
     {
         var faker = new Faker<FakeAddress>("pt_BR")
             .RuleFor(u => u.AddressId, f => addressId ?? f.Random.Long(1000, 99999))

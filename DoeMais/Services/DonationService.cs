@@ -18,6 +18,9 @@ public class DonationService : IDonationService
     
     public async Task<Result<DonationDto?>> CreateDonationAsync(CreateDonationDto dto)
     {
+        if (string.IsNullOrEmpty(dto.Title))
+            throw new ArgumentNullException();
+        
         var donation = dto.ToEntity();
         var result = await _donationRepository.CreateDonationAsync(donation);
         
@@ -42,13 +45,17 @@ public class DonationService : IDonationService
             : new Result<DonationDto?>(ResultType.Success, donation.ToDto());
     }
 
-    public async Task<Result<DonationDto?>> UpdateDonationAsync(UpdateDonationDto donation)
+    public async Task<Result<DonationDto?>> UpdateDonationAsync(long donationId, UpdateDonationDto donation)
     {
+        if (donationId != donation.DonationId)
+        {
+            return new Result<DonationDto?>(ResultType.Mismatch, null, "Donation Ids mismatch.");
+        }
         var foundDonation = await _donationRepository.GetDonationByIdAsync(donation.DonationId);
         if (foundDonation == null) return new Result<DonationDto?>(ResultType.NotFound, null, "Donation could not be found.");
         
         foundDonation.UpdateFromDto(donation);
-        var updatedDonation = await _donationRepository.UpdateDonationAsync(foundDonation);
+        var updatedDonation = await _donationRepository.UpdateDonationAsync(donationId, foundDonation);
         
         return updatedDonation == null 
             ? new Result<DonationDto?>(ResultType.Error, null, "Error updating donation.") 

@@ -25,7 +25,7 @@ public class DonationController : ControllerBase
 
         return result.Type switch
         {
-            ResultType.Error => BadRequest("Error while creating donation"),
+            ResultType.Error => BadRequest("Error while creating donation."),
             ResultType.Success => Ok(result),
             _ => StatusCode(StatusCodes.Status500InternalServerError)
         };
@@ -63,13 +63,11 @@ public class DonationController : ControllerBase
     [HttpPut("{donationId:long}")]
     public async Task<IActionResult> UpdateDonationAsync(long donationId, [FromBody] UpdateDonationDto dto)
     {
-        if (donationId != dto.DonationId)
-            return BadRequest();
-        
-        var result = await _donationService.UpdateDonationAsync(dto);
+        var result = await _donationService.UpdateDonationAsync(donationId, dto);
         
         return result.Type switch
         {
+            ResultType.Mismatch => BadRequest(result),
             ResultType.NotFound => NotFound(result),
             ResultType.Error => NotFound(result),
             ResultType.Success => Ok(result),
@@ -85,7 +83,7 @@ public class DonationController : ControllerBase
         
         return result.Type switch
         {
-            ResultType.Error => BadRequest(result),
+            ResultType.Error => NotFound(result),
             ResultType.Success => Ok(result),
             _ => StatusCode(StatusCodes.Status500InternalServerError)
         };
