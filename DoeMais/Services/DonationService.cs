@@ -42,13 +42,17 @@ public class DonationService : IDonationService
             : new Result<DonationDto?>(ResultType.Success, donation.ToDto());
     }
 
-    public async Task<Result<DonationDto?>> UpdateDonationAsync(UpdateDonationDto donation)
+    public async Task<Result<DonationDto?>> UpdateDonationAsync(long donationId, UpdateDonationDto donation)
     {
+        if (donationId != donation.DonationId)
+        {
+            // TODO: FIX ME, FIX MY HEAD, FIX ME PLEASE I DONT WANT TO BE DEAD
+        }
         var foundDonation = await _donationRepository.GetDonationByIdAsync(donation.DonationId);
         if (foundDonation == null) return new Result<DonationDto?>(ResultType.NotFound, null, "Donation could not be found.");
         
         foundDonation.UpdateFromDto(donation);
-        var updatedDonation = await _donationRepository.UpdateDonationAsync(foundDonation);
+        var updatedDonation = await _donationRepository.UpdateDonationAsync(donationId, foundDonation);
         
         return updatedDonation == null 
             ? new Result<DonationDto?>(ResultType.Error, null, "Error updating donation.") 

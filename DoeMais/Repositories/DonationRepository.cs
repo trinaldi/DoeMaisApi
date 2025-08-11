@@ -1,5 +1,6 @@
 using DoeMais.Data;
 using DoeMais.Domain.Entities;
+using DoeMais.Extensions;
 using DoeMais.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -53,9 +54,13 @@ public class DonationRepository : IDonationRepository
         return true;
     }
 
-    public async Task<Donation?> UpdateDonationAsync(Donation donation)
+    public async Task<Donation?> UpdateDonationAsync(long donationId, Donation donation)
     {
-        _ctx.Donations.Update(donation);
+        var existingDonation = await _ctx.Donations
+            .FirstOrDefaultAsync(d => d.DonationId == donationId);
+        if (existingDonation is null) return null;
+        
+        existingDonation.UpdateFrom(donation);
         await _ctx.SaveChangesAsync();
         
         return await _ctx.Donations

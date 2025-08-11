@@ -23,6 +23,24 @@ public static class TestDataFactory
 
         return (fakeUser, fakeAddress);
     }
+    
+    public static async Task<(User user, Donation donation)> CreateUserWithDonationAsync(AppDbContext context)
+    {
+        var fakeUser = FakeUser.Create().ToEntity();
+
+        if (fakeUser.UserId == 0) fakeUser.UserId = 1;
+
+        var fakeDonation = FakeDonation.Create().WithAddress().ToEntity();
+        fakeDonation.UserId = fakeUser.UserId;
+
+        context.Users.Add(fakeUser);
+        context.Donations.Add(fakeDonation);
+
+        await context.SaveChangesAsync();
+
+        return (fakeUser, fakeDonation);
+    }
+
 
     public static async Task<List<Address>> CreateAddressesAsync(AppDbContext context)
     {
@@ -51,23 +69,34 @@ public static class TestDataFactory
         return address;
     }
 
-    // public static async Task<User> CreatePersistedUserAsync(AppDbContext context)
-    // {
-    //     var user = FakeUser.Create().ToEntity();
+    public static async Task<Donation> CreatePersistedDonationAsync(AppDbContext context)
+    {
+        var donation = FakeDonation.Create().WithAddress().ToEntity();
 
-    //     context.Users.Add(user);
-    //     await context.SaveChangesAsync();
+        context.Donations.Add(donation);
+        await context.SaveChangesAsync();
 
-    //     return user;
-    // }
+        return donation;
+    }
 
-    // public static async Task<Donation> CreatePersistedDonationAsync(AppDbContext context)
-    // {
-    //     var donation = FakeDonation.Create().ToEntity();
+    public static async Task<List<Donation>> CreateDonationListAsync(AppDbContext context)
+    {
+        const int userId = 1;
+        var address = await CreatePersistedAddressAsync(context);
+        var donations = Enumerable.Range(1, 3)
+            .Select(_ =>
+            {
+                var donation = FakeDonation.Create().WithAddress().ToEntity();
+                donation.UserId = userId;
+                donation.Address = address;
+                return donation;
+            })
+            .ToList();
+        
+        context.Donations.AddRange(donations);
+        await context.SaveChangesAsync();
 
-    //     context.Donations.Add(donation);
-    //     await context.SaveChangesAsync();
+        return donations;
+    }
 
-    //     return donation;
-    // }
 }

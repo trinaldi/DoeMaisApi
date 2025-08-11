@@ -84,9 +84,6 @@ namespace DoeMais.Tests.Repositories
             });
         }
         
-        // TODO: GetAddressesAsync_ShouldOrderAddressesByIsPrimaryDescending
-        // Important because I'll need to create the unique IsPrimary logic.
-        
         [Test]
         public async Task CreateAddressAsync_ShouldAddAddress_AndCallSaveChangesAsync()
         {

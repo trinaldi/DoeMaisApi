@@ -63,10 +63,11 @@ public class DonationController : ControllerBase
     [HttpPut("{donationId:long}")]
     public async Task<IActionResult> UpdateDonationAsync(long donationId, [FromBody] UpdateDonationDto dto)
     {
+        // TODO: This is not my responsibility!!!
         if (donationId != dto.DonationId)
             return BadRequest();
         
-        var result = await _donationService.UpdateDonationAsync(dto);
+        var result = await _donationService.UpdateDonationAsync(donationId, dto);
         
         return result.Type switch
         {
