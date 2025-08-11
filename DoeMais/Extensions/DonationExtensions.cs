@@ -61,4 +61,17 @@ public static class DonationExtensions
             User = donation.User
         };
     }
+    public static CreateDonationDto ToCreateDonationDto(this Donation donation)
+    {
+        return new CreateDonationDto
+        {
+            UserId = donation.UserId,
+            AddressId = donation.AddressId,
+            Title = donation.Title,
+            Description = donation.Description,
+            Quantity = donation.Quantity,
+            Status = donation.Status,
+            Images = donation.Images?.ToList() ?? new List<string>()
+        };
+    }
 }
