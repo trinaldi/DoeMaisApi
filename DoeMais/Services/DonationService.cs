@@ -18,6 +18,9 @@ public class DonationService : IDonationService
     
     public async Task<Result<DonationDto?>> CreateDonationAsync(CreateDonationDto dto)
     {
+        if (string.IsNullOrEmpty(dto.Title))
+            throw new ArgumentNullException();
+        
         var donation = dto.ToEntity();
         var result = await _donationRepository.CreateDonationAsync(donation);
         
@@ -46,7 +49,7 @@ public class DonationService : IDonationService
     {
         if (donationId != donation.DonationId)
         {
-            // TODO: FIX ME, FIX MY HEAD, FIX ME PLEASE I DONT WANT TO BE DEAD
+            return new Result<DonationDto?>(ResultType.Mismatch, null, "Donation Ids mismatch.");
         }
         var foundDonation = await _donationRepository.GetDonationByIdAsync(donation.DonationId);
         if (foundDonation == null) return new Result<DonationDto?>(ResultType.NotFound, null, "Donation could not be found.");
