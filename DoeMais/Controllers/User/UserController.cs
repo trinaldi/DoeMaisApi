@@ -21,7 +21,7 @@ public class UserController : ControllerBase
 
     [Authorize]
     [HttpGet("me")]
-    public async Task<IActionResult> Me()
+    public async Task<IActionResult> Get()
     {
         var userId = User.GetUserId();
         var result = await _userService.GetByIdAsync(userId);
@@ -37,7 +37,7 @@ public class UserController : ControllerBase
 
     [Authorize]
     [HttpPut("me")]
-    public async Task<IActionResult> UpdateProfile([FromBody] UpdateUserDto dto)
+    public async Task<IActionResult> Update([FromBody] UpdateUserDto dto)
     {
         var userId = User.GetUserId();
         var result = await _userService.UpdateUserAsync(userId, dto);

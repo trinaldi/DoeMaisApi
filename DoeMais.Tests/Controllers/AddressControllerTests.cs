@@ -46,7 +46,7 @@ public class AddressControllerTests
         _addressServiceMock.Setup(s => s.GetAddressByIdAsync(addressId))
             .ReturnsAsync(new Result<AddressDto>(ResultType.Success, addressDto));
        
-        var result = await _addressController.GetAddressById(addressId);
+        var result = await _addressController.GetById(addressId);
         var okObjectResult = (OkObjectResult)result;
         var resultDto = okObjectResult.Value as Result<AddressDto>;
 
@@ -64,7 +64,7 @@ public class AddressControllerTests
         _addressServiceMock.Setup(s => s.GetAddressByIdAsync(1))
             .ReturnsAsync(new Result<AddressDto>(ResultType.NotFound));
        
-        var result = await _addressController.GetAddressById(1);
+        var result = await _addressController.GetById(1);
         var okObjectResult = (NotFoundObjectResult)result;
         var resultDto = okObjectResult.Value as Result<AddressDto>;
             
@@ -83,7 +83,7 @@ public class AddressControllerTests
         _addressServiceMock.Setup(s => s.GetAddressesAsync())
             .ReturnsAsync(new Result<List<AddressDto>?>(ResultType.Success, addresses));
         
-        var result = await _addressController.GetAddresses();
+        var result = await _addressController.GetAll();
         var okObjectResult = (OkObjectResult)result;
         var resultDto = okObjectResult.Value as Result<List<AddressDto>>;
         
@@ -102,7 +102,7 @@ public class AddressControllerTests
         _addressServiceMock.Setup(s => s.GetAddressesAsync())
             .ReturnsAsync(new Result<List<AddressDto>?>(ResultType.Success, addresses));
         
-        var result = await _addressController.GetAddresses();
+        var result = await _addressController.GetAll();
         var okObjectResult = (OkObjectResult)result;
         var resultDto = okObjectResult.Value as Result<List<AddressDto>>;
         
@@ -121,7 +121,7 @@ public class AddressControllerTests
         _addressServiceMock.Setup(s => s.CreateAddressAsync(addressToBeCreated))
             .ReturnsAsync(new Result<AddressDto?>(ResultType.Success, addressToBeCreated));
         
-        var result = await _addressController.CreateAddress(addressToBeCreated);
+        var result = await _addressController.Create(addressToBeCreated);
         var okObjectResult = (OkObjectResult)result;
         var resultDto = okObjectResult.Value as Result<AddressDto>;
         
@@ -141,7 +141,7 @@ public class AddressControllerTests
         _addressServiceMock.Setup(s => s.CreateAddressAsync(addressToBeCreated))
             .ReturnsAsync(new Result<AddressDto?>(ResultType.Error));
         
-        var result = await _addressController.CreateAddress(addressToBeCreated);
+        var result = await _addressController.Create(addressToBeCreated);
         var okObjectResult = (BadRequestObjectResult)result;
         var resultDto = okObjectResult.Value as Result<AddressDto>;
         
@@ -158,7 +158,7 @@ public class AddressControllerTests
         _addressServiceMock.Setup(s => s.DeleteAddressAsync(addressToBeDeleted))
             .ReturnsAsync(new Result<bool>(ResultType.Success, true));
         
-        var result = await _addressController.DeleteAddress(addressToBeDeleted);
+        var result = await _addressController.Delete(addressToBeDeleted);
         var okObjectResult = (OkObjectResult)result;
         var resultDto = okObjectResult.Value as Result<bool>;
         
@@ -176,7 +176,7 @@ public class AddressControllerTests
         _addressServiceMock.Setup(s => s.DeleteAddressAsync(addressToBeDeleted))
             .ReturnsAsync(new Result<bool>(ResultType.Error, false));
         
-        var result = await _addressController.DeleteAddress(addressToBeDeleted);
+        var result = await _addressController.Delete(addressToBeDeleted);
         var okObjectResult = (NotFoundObjectResult)result;
         var resultDto = okObjectResult.Value as Result<bool>;
         
