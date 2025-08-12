@@ -46,7 +46,7 @@ public class DonationControllerTests
         _donationServiceMock.Setup(s => s.GetDonationByIdAsync(donationId))
             .ReturnsAsync(new Result<DonationDto?>(ResultType.Success, donationDto));
 
-        var result = await _donationController.GetDonationById(donationId);
+        var result = await _donationController.GetById(donationId);
         var okObjectResult = (OkObjectResult)result;
         var resultDto = okObjectResult.Value as Result<DonationDto>;
         
@@ -65,7 +65,7 @@ public class DonationControllerTests
         _donationServiceMock.Setup(s => s.GetDonationByIdAsync(bogusDonationId))
             .ReturnsAsync(new Result<DonationDto?>(ResultType.NotFound, null, "Donation not found."));
         
-        var result = await _donationController.GetDonationById(bogusDonationId);
+        var result = await _donationController.GetById(bogusDonationId);
         var notFoundObjectResult = (NotFoundObjectResult)result;
         
         Assert.Multiple(() =>
@@ -82,7 +82,7 @@ public class DonationControllerTests
         _donationServiceMock.Setup(s => s.GetDonationListAsync())
             .ReturnsAsync(new Result<List<DonationDto>>(ResultType.Success, donations));
         
-        var result = await _donationController.GetDonationList();
+        var result = await _donationController.GetAll();
         var okObjectResult = (OkObjectResult)result;
         var resultDto = okObjectResult.Value as Result<List<DonationDto>>;
         
@@ -101,7 +101,7 @@ public class DonationControllerTests
         _donationServiceMock.Setup(s => s.GetDonationListAsync())
             .ReturnsAsync(new Result<List<DonationDto>>(ResultType.Success, donations));
         
-        var result = await _donationController.GetDonationList();
+        var result = await _donationController.GetAll();
         var okObjectResult = (OkObjectResult)result;
         var resultDto = okObjectResult.Value as Result<List<DonationDto>>;
         
@@ -124,7 +124,7 @@ public class DonationControllerTests
         _donationServiceMock.Setup(s => s.CreateDonationAsync(toBeCreatedDto))
             .ReturnsAsync(new Result<DonationDto?>(ResultType.Success, toBeCreated));
 
-        var result = await _donationController.CreateDonationForMe(toBeCreatedDto);
+        var result = await _donationController.Create(toBeCreatedDto);
         var okObjectResult = (OkObjectResult)result;
         var resultDto = okObjectResult.Value as Result<DonationDto>;
         
@@ -145,7 +145,7 @@ public class DonationControllerTests
         _donationServiceMock.Setup(s => s.UpdateDonationAsync(bogusDonationId, donationDto))
             .ReturnsAsync(new Result<DonationDto?>(ResultType.Mismatch, null, "Donation Ids mismatch."));
 
-        var result = await _donationController.UpdateDonationAsync(bogusDonationId, donationDto);
+        var result = await _donationController.Update(bogusDonationId, donationDto);
         var badRequestObjectResult = (BadRequestObjectResult)result;
         var resultDto = badRequestObjectResult.Value as Result<DonationDto>;
 
@@ -169,7 +169,7 @@ public class DonationControllerTests
         _donationServiceMock.Setup(s => s.UpdateDonationAsync(donationId, dto))
             .ReturnsAsync(successResult);
 
-        var result = await _donationController.UpdateDonationAsync(donationId, dto);
+        var result = await _donationController.Update(donationId, dto);
         var okResult = (OkObjectResult)result;
         var value = okResult.Value as Result<DonationDto?>;
 
@@ -193,7 +193,7 @@ public class DonationControllerTests
         _donationServiceMock.Setup(s => s.UpdateDonationAsync(donationId, dto))
             .ReturnsAsync(notFoundResult);
 
-        var result = await _donationController.UpdateDonationAsync(donationId, dto);
+        var result = await _donationController.Update(donationId, dto);
         var notFound = (NotFoundObjectResult)result;
         var val = notFound.Value as Result<DonationDto?>;
 
@@ -213,7 +213,7 @@ public class DonationControllerTests
         _donationServiceMock.Setup(s => s.DeleteDonationAsync(toBeDeleted))
             .ReturnsAsync(new Result<bool>(ResultType.Success, true));
         
-        var result = await _donationController.DeleteDonation(toBeDeleted);
+        var result = await _donationController.Delete(toBeDeleted);
         var okObjectResult = (OkObjectResult)result;
         var resultDto = okObjectResult.Value as Result<bool>;
         
@@ -231,7 +231,7 @@ public class DonationControllerTests
         _donationServiceMock.Setup(s => s.DeleteDonationAsync(bogusDonationId))
             .ReturnsAsync(new Result<bool>(ResultType.Error, false));
         
-        var result = await _donationController.DeleteDonation(bogusDonationId);
+        var result = await _donationController.Delete(bogusDonationId);
         var okObjectResult = (NotFoundObjectResult)result;
         var resultDto = okObjectResult.Value as Result<bool>;
         

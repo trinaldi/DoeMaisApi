@@ -48,7 +48,7 @@ public class UserControllerTests
         _userServiceMock.Setup(service => service.GetByIdAsync(_userProfileDto.UserId))
             .ReturnsAsync(new Result<UserProfileDto?>(ResultType.Success, _userProfileDto));
 
-        var result = await _userController.Me();
+        var result = await _userController.Get();
         var okObjectResult = (OkObjectResult)result;
         var resultDto = okObjectResult.Value as Result<UserProfileDto?>;
         
@@ -67,7 +67,7 @@ public class UserControllerTests
         _userServiceMock.Setup(service => service.GetByIdAsync(1))
             .ReturnsAsync(new Result<UserProfileDto?>(ResultType.NotFound));
 
-        var result = await _userController.Me();
+        var result = await _userController.Get();
 
         Assert.That(result, Is.InstanceOf<NotFoundObjectResult>());
     }
@@ -81,7 +81,7 @@ public class UserControllerTests
         _userServiceMock.Setup(s => s.UpdateUserAsync(_userProfileDto.UserId, dto))
             .ReturnsAsync(resultFromService);
 
-        var actionResult = await _userController.UpdateProfile(dto);
+        var actionResult = await _userController.Update(dto);
         var okResult = actionResult as OkObjectResult;
 
         Assert.Multiple(() =>
@@ -101,7 +101,7 @@ public class UserControllerTests
             .ReturnsAsync(notFoundResult);
 
         
-        var actionResult = await _userController.UpdateProfile(dto);
+        var actionResult = await _userController.Update(dto);
         var notFoundObjectResult = actionResult as NotFoundObjectResult;
         
         Assert.Multiple(() =>

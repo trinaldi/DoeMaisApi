@@ -21,7 +21,7 @@ public class AddressController : ControllerBase
 
     [Authorize]
     [HttpGet("all")]
-    public async Task<IActionResult> GetAddresses()
+    public async Task<IActionResult> GetAll()
     {
         var result = await _addressService.GetAddressesAsync();
 
@@ -34,7 +34,7 @@ public class AddressController : ControllerBase
     
     [Authorize]
     [HttpGet("{addressId:long}")]
-    public async Task<IActionResult> GetAddressById(long addressId)
+    public async Task<IActionResult> GetById(long addressId)
     {
         var result = await _addressService.GetAddressByIdAsync(addressId);
 
@@ -48,7 +48,7 @@ public class AddressController : ControllerBase
 
     [Authorize]
     [HttpPost]
-    public async Task<IActionResult> CreateAddress([FromBody] AddressDto dto)
+    public async Task<IActionResult> Create([FromBody] AddressDto dto)
     {
         var result = await _addressService.CreateAddressAsync(dto);
 
@@ -62,7 +62,7 @@ public class AddressController : ControllerBase
     
     [Authorize]
     [HttpPut("{addressId:long}")]
-    public async Task<IActionResult> UpdateAddress(long addressId, [FromBody]AddressDto dto)
+    public async Task<IActionResult> Update(long addressId, [FromBody]AddressDto dto)
     {
         var result = await _addressService.UpdateAddressAsync(addressId, dto);
 
@@ -78,7 +78,7 @@ public class AddressController : ControllerBase
 
     [Authorize]
     [HttpDelete("{addressId:long}")]
-    public async Task<IActionResult> DeleteAddress(long addressId)
+    public async Task<IActionResult> Delete(long addressId)
     {
         var result = await _addressService.DeleteAddressAsync(addressId);
 

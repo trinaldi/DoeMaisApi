@@ -18,8 +18,8 @@ public class DonationController : ControllerBase
     }
     
     [Authorize]
-    [HttpPost("me")]
-    public async Task<IActionResult> CreateDonationForMe([FromBody] CreateDonationDto dto)
+    [HttpPost]
+    public async Task<IActionResult> Create([FromBody] CreateDonationDto dto)
     {
         var result = await _donationService.CreateDonationAsync(dto);
 
@@ -33,7 +33,7 @@ public class DonationController : ControllerBase
 
     [Authorize]
     [HttpGet("{donationId:long}")]
-    public async Task<IActionResult> GetDonationById(long donationId)
+    public async Task<IActionResult> GetById(long donationId)
     {
         var result = await _donationService.GetDonationByIdAsync(donationId);
         
@@ -47,7 +47,7 @@ public class DonationController : ControllerBase
     
     [Authorize]
     [HttpGet]
-    public async Task<IActionResult> GetDonationList()
+    public async Task<IActionResult> GetAll()
     {
         var result = await _donationService.GetDonationListAsync();
         
@@ -61,7 +61,7 @@ public class DonationController : ControllerBase
 
     [Authorize]
     [HttpPut("{donationId:long}")]
-    public async Task<IActionResult> UpdateDonationAsync(long donationId, [FromBody] UpdateDonationDto dto)
+    public async Task<IActionResult> Update(long donationId, [FromBody] UpdateDonationDto dto)
     {
         var result = await _donationService.UpdateDonationAsync(donationId, dto);
         
@@ -77,7 +77,7 @@ public class DonationController : ControllerBase
     
     [Authorize]
     [HttpDelete("{donationId:long}")]
-    public async Task<IActionResult> DeleteDonation(long donationId)
+    public async Task<IActionResult> Delete(long donationId)
     {
         var result = await _donationService.DeleteDonationAsync(donationId);
         
