@@ -16,5 +16,6 @@ public record DonationDto
     public string? Description { get; init; }
     public int? Quantity { get; init; }
     public Status Status { get; init; }
+    public Category Category { get; init; }
     public ICollection<string>? Images { get; init; } = new List<string>();
 }

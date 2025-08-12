@@ -16,6 +16,7 @@ public static class DonationExtensions
             Description = donation.Description,
             Quantity = donation.Quantity,
             Status = donation.Status,
+            Category = donation.Category,
             Images = new List<string>(donation.Images)
         };
     } 
@@ -26,6 +27,7 @@ public static class DonationExtensions
         donation.Description = dto.Description ?? donation.Description;
         donation.Quantity = dto.Quantity ?? donation.Quantity;
         donation.Status = dto.Status ?? donation.Status;
+        donation.Category = dto.Category ?? donation.Category;
 
         if (dto.AddressId != 0 && dto.AddressId != donation.AddressId)
             donation.AddressId = dto.AddressId;
@@ -37,6 +39,7 @@ public static class DonationExtensions
         target.Description = source.Description;
         target.Quantity = source.Quantity;
         target.Status = source.Status;
+        target.Category = source.Category;
         target.Images = source.Images;
     }
     
@@ -56,6 +59,7 @@ public static class DonationExtensions
             Description = donation.Description,
             Quantity = donation.Quantity,
             Status = donation.Status,
+            Category = donation.Category,
             Address = donation.Address,
             Images = donation.Images,
             User = donation.User
@@ -71,6 +75,7 @@ public static class DonationExtensions
             Description = donation.Description,
             Quantity = donation.Quantity,
             Status = donation.Status,
+            Category = donation.Category,
             Images = donation.Images?.ToList() ?? new List<string>()
         };
     }

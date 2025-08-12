@@ -87,6 +87,10 @@ public class AppDbContext : DbContext
             .IsRequired()
             .OnDelete(DeleteBehavior.Restrict);
         
+        modelBuilder.Entity<Donation>()
+            .Property(d => d.Category)
+            .HasConversion<string>();
+        
         modelBuilder.Entity<UserRole>()
             .HasKey(ur => new { ur.UserId, ur.RoleId });
         
