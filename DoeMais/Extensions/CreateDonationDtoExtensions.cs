@@ -15,6 +15,7 @@ public static class CreateDonationDtoExtensions
             Description = dto.Description ?? "",
             Quantity = dto.Quantity ?? 1,
             Status = dto.Status,
+            Category = dto.Category,
             Images = dto.Images != null ? new List<string>(dto.Images) : new List<string>()
         };
     }

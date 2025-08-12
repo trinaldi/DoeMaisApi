@@ -14,6 +14,7 @@ public class FakeDonation
     public string Description { get; set; } = "";
     public int? Quantity { get; set; }
     public Status Status { get; set; }
+    public Category Category { get; set; }
     
     public ICollection<string> Images { get; set; } = new List<string>();
 
@@ -27,6 +28,7 @@ public class FakeDonation
             .RuleFor(d => d.Description, f => f.Lorem.Sentence())
             .RuleFor(d => d.Quantity, f => f.Random.Int(1, 10))
             .RuleFor(d => d.Status, f => f.PickRandom<Status>())
+            .RuleFor(d => d.Category, f => f.PickRandom<Category>())
             .RuleFor(d => d.Images, f => new List<string>
             {
                 f.Image.PicsumUrl(),
@@ -36,7 +38,7 @@ public class FakeDonation
         return faker.Generate();
     } 
     
-    public static List<FakeDonation> CreateMany(long? userId = null, long? addressId = null, int qty = 1)
+    public static List<FakeDonation> CreateMany(long? userId = null, long? addressId = null, int qty = 2)
     {
         var faker = new Faker<FakeDonation>("pt_BR")
             .RuleFor(d => d.DonationId, f => f.IndexGlobal + 1)
@@ -46,6 +48,7 @@ public class FakeDonation
             .RuleFor(d => d.Description, f => f.Lorem.Sentence())
             .RuleFor(d => d.Quantity, f => f.Random.Int(1, 10))
             .RuleFor(d => d.Status, f => f.PickRandom<Status>())
+            .RuleFor(d => d.Category, f => f.PickRandom<Category>())
             .RuleFor(d => d.Images, f => new List<string>
             {
                 f.Image.PicsumUrl(),

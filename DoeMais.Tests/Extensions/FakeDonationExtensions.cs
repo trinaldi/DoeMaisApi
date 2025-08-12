@@ -18,6 +18,7 @@ public static class FakeDonationExtensions
             Description = fakeDonation.Description,
             Quantity = fakeDonation.Quantity,
             Status = fakeDonation.Status,
+            Category = fakeDonation.Category,
             Images = fakeDonation.Images
         };
     }
@@ -33,6 +34,7 @@ public static class FakeDonationExtensions
             Description = fakeDonation.Description,
             Quantity = fakeDonation.Quantity,
             Status = fakeDonation.Status,
+            Category = fakeDonation.Category,
             Images = fakeDonation.Images
         };
     }
