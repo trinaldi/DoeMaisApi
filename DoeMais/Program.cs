@@ -92,12 +92,12 @@ builder.Services.AddScoped<IAddressService, AddressService>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseHsts();
 app.UseStaticFiles();
 app.UseHttpsRedirection();
 app.UseAuthentication();
