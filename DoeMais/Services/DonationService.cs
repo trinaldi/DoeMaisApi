@@ -18,9 +18,6 @@ public class DonationService : IDonationService
     
     public async Task<Result<DonationDto?>> CreateDonationAsync(CreateDonationDto dto)
     {
-        if (string.IsNullOrEmpty(dto.Title))
-            throw new ArgumentNullException();
-        
         var donation = dto.ToEntity();
         var result = await _donationRepository.CreateDonationAsync(donation);
         

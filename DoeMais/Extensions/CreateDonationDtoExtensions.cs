@@ -10,7 +10,15 @@ public static class CreateDonationDtoExtensions
         return new Donation
         {
             UserId = dto.UserId,
-            AddressId = dto.AddressId,
+            AddressSnapshot = new AddressSnapshot
+            {
+                Street = dto.Address.Street,
+                Complement = dto.Address.Complement,
+                Neighborhood = dto.Address.Neighborhood,
+                City = dto.Address.City,
+                State = dto.Address.State,
+                ZipCode = dto.Address.ZipCode
+            },
             Title = dto.Title,
             Description = dto.Description ?? "",
             Quantity = dto.Quantity ?? 1,

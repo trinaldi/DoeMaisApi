@@ -186,9 +186,7 @@ public class DonationRepositoryTests
      public async Task DeleteDonationAsync_ShouldNotDeleteOtherAddresses_WhenDeletingSpecificAddress()
      {
          var firstDonation = FakeDonation.Create().WithAddress().ToEntity();
-         firstDonation.Address.AddressId = 1;
          var secondDonation = FakeDonation.Create().WithAddress().ToEntity();
-         firstDonation.Address.AddressId = 2;
          await _repository.CreateDonationAsync(firstDonation);
          await _repository.CreateDonationAsync(secondDonation);
 

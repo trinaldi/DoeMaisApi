@@ -74,7 +74,20 @@ public static class AddressExtensions
             State = address.State ?? "",
             ZipCode = address.ZipCode ?? "",
             IsPrimary = address.IsPrimary,
-            Donations = address.Donations
+        };
+    }
+
+    public static AddressSnapshot AsAddressSnapshot(this Address address)
+    {
+        return new AddressSnapshot()
+        {
+            City = address.City,
+            Complement = address.Complement,
+            Neighborhood = address.Neighborhood,
+            State = address.State,
+            Street = address.Street,
+            ZipCode = address.ZipCode
+
         };
     }
     

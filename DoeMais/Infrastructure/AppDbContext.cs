@@ -80,12 +80,20 @@ public class AppDbContext : DbContext
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
         
-        modelBuilder.Entity<Donation>()
-            .HasOne(d => d.Address)
-            .WithMany(a => a.Donations)
-            .HasForeignKey(d => d.AddressId)
-            .IsRequired()
-            .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Ignore<AddressSnapshot>();
+        modelBuilder.Entity<Donation>(e =>
+        {
+            e.OwnsOne(d => d.AddressSnapshot, a =>
+            {
+                a.WithOwner();
+                a.Property(p => p.Street).HasMaxLength(160).IsRequired();
+                a.Property(p => p.Complement).HasMaxLength(80);
+                a.Property(p => p.Neighborhood).HasMaxLength(80);
+                a.Property(p => p.City).HasMaxLength(80).IsRequired();
+                a.Property(p => p.State).HasMaxLength(2).IsRequired();
+                a.Property(p => p.ZipCode).HasMaxLength(12).IsRequired();
+            });
+        });
         
         modelBuilder.Entity<Donation>()
             .Property(d => d.Category)
@@ -128,7 +136,7 @@ public class AppDbContext : DbContext
     private void UpdateTimestamps()
     {
         var entries = ChangeTracker.Entries()
-            .Where(e => e.State is EntityState.Added or EntityState.Modified);
+            .Where(e => e.State is EntityState.Added or EntityState.Modified && e.Metadata.IsOwned() == false);
 
         foreach (var entry in entries)
         {

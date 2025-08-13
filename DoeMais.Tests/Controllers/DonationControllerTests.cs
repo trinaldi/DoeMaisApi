@@ -78,7 +78,7 @@ public class DonationControllerTests
     [Test]
     public async Task GetDonationList_ShouldReturnDonation_WhenDonationsExist()
     {
-        var donations = FakeDonation.CreateMany(3).Select(d => d.ToDto()).ToList();
+        var donations = FakeDonation.CreateMany(3).Select(d => d.WithAddress().ToDto()).ToList();
         _donationServiceMock.Setup(s => s.GetDonationListAsync())
             .ReturnsAsync(new Result<List<DonationDto>>(ResultType.Success, donations));
         

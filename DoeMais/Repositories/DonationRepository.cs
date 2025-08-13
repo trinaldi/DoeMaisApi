@@ -20,7 +20,6 @@ public class DonationRepository : IDonationRepository
         await _ctx.SaveChangesAsync();
         
         var donationWithIncludes = await _ctx.Donations
-            .Include(d => d.Address)
             .FirstOrDefaultAsync(d => d.DonationId == donation.DonationId);
 
         return donationWithIncludes;
@@ -29,7 +28,6 @@ public class DonationRepository : IDonationRepository
     public async Task<List<Donation>> GetDonationListAsync()
     {
         return await _ctx.Donations
-            .Include(d => d.Address)
             .ToListAsync();
     }
 
@@ -37,7 +35,6 @@ public class DonationRepository : IDonationRepository
     {
         return await _ctx.Donations
             .Where(d => d.DonationId == donationId)
-            .Include(d => d.Address)
             .FirstOrDefaultAsync();
     }
 
@@ -64,7 +61,6 @@ public class DonationRepository : IDonationRepository
         await _ctx.SaveChangesAsync();
         
         return await _ctx.Donations
-            .Include(d => d.Address)
             .FirstOrDefaultAsync(d => d.DonationId == donation.DonationId);
     }
 }

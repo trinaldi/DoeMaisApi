@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using DoeMais.Domain.Entities;
 using DoeMais.Domain.Enums;
 
 namespace DoeMais.DTOs.Donation;
@@ -6,7 +7,6 @@ namespace DoeMais.DTOs.Donation;
 public record CreateDonationDto
 {
     public long UserId { get; init; }
-    public long AddressId { get; init; }
     
     [Required]
     [StringLength(100, ErrorMessage = "Title must be at most 100 characters.")]
@@ -19,5 +19,6 @@ public record CreateDonationDto
     [Required]
     [Range(1, 10, ErrorMessage = "Categoria inválida. Digite 10 para 'Outros'.")]
     public Category Category { get; init; }
+    public AddressSnapshot Address { get; set; } = new AddressSnapshot();
     public ICollection<string>? Images { get; init; } = new List<string>();
 }
