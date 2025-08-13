@@ -18,22 +18,7 @@ public static class FakeAddressExtensions
             State = fakeAddress.State ?? "",
             ZipCode = fakeAddress.ZipCode ?? "",
             IsPrimary = fakeAddress.IsPrimary,
-            Donations = new List<Donation>()
         };
-        
-        address.Donations = 
-            fakeAddress
-            .FakeDonations
-            .Select(d => new Donation
-            {
-                DonationId = d.DonationId,
-                AddressId = d.AddressId,
-                Title = d.Title,
-                Description = d.Description,
-                Quantity = d.Quantity,
-                Status = d.Status,
-                Images = d.Images,
-            }).ToList();
         
         return address;
     }
@@ -55,5 +40,17 @@ public static class FakeAddressExtensions
         
         return dto;
     }
-    
+
+    public static AddressSnapshot ToAddressSnapshot(this FakeAddress fakeAddress)
+    {
+        return new AddressSnapshot()
+        {
+            City = fakeAddress.City,
+            Complement = fakeAddress.Complement,
+            Neighborhood = fakeAddress.Neighborhood,
+            State = fakeAddress.State,
+            Street = fakeAddress.Street,
+            ZipCode = fakeAddress.ZipCode
+        };
+    }
 }

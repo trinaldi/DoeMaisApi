@@ -1,5 +1,6 @@
 using DoeMais.Data;
 using DoeMais.Domain.Entities;
+using DoeMais.Extensions;
 using DoeMais.Tests.Domain;
 using DoeMais.Tests.Extensions;
 
@@ -88,7 +89,7 @@ public static class TestDataFactory
             {
                 var donation = FakeDonation.Create().WithAddress().ToEntity();
                 donation.UserId = userId;
-                donation.Address = address;
+                donation.AddressSnapshot = address.AsAddressSnapshot();
                 return donation;
             })
             .ToList();

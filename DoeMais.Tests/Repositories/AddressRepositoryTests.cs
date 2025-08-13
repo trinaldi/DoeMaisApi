@@ -129,7 +129,6 @@ namespace DoeMais.Tests.Repositories
                 Assert.That(result.State, Is.EqualTo(address.State));
                 Assert.That(result.ZipCode, Is.EqualTo(address.ZipCode));
                 Assert.That(result.IsPrimary, Is.EqualTo(address.IsPrimary));
-                Assert.That(result.Donations, Is.EqualTo(address.Donations));
             });
 
         }

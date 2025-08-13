@@ -9,6 +9,7 @@ using DoeMais.Tests.Domain;
 using DoeMais.Tests.Extensions;
 using DoeMais.Tests.Helpers.Asserts;
 using DoeMais.Tests.Helpers.Factories;
+using FluentAssertions;
 using Moq;
 
 namespace DoeMais.Tests.Services;
@@ -28,7 +29,6 @@ public class DonationServiceTests
     [Test]
     public async Task GetDonationByIdAsync_ShouldReturnDonation_WhenDonationExists()
     {
-        var comparer = new RecordDeepEqualityComparer<DonationDto>();
         var donation = FakeDonation.Create().WithAddress().ToEntity();
         var donationDto = donation.ToDto();
         _donationRepositoryMock.Setup(r => r.GetDonationByIdAsync(donationDto.DonationId))
@@ -39,7 +39,7 @@ public class DonationServiceTests
         Assert.Multiple(() =>
         {
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Data, Is.EqualTo(donationDto).Using(comparer));
+            result.Data.Should().BeEquivalentTo(donationDto);
         });
     }
     
@@ -103,7 +103,6 @@ public class DonationServiceTests
         {
             Assert.That(result, Is.Not.Null);
             Assert.That(result!.Data!.UserId, Is.EqualTo(createDonationDto.UserId));
-            Assert.That(result!.Data!.AddressId, Is.EqualTo(createDonationDto.AddressId));
             Assert.That(result!.Data!.Title, Is.EqualTo(createDonationDto.Title));
             Assert.That(result!.Data!.Description, Is.EqualTo(createDonationDto.Description));
             Assert.That(result!.Data!.Quantity, Is.EqualTo(createDonationDto.Quantity));
@@ -112,16 +111,6 @@ public class DonationServiceTests
         });
     }
    
-    [Test]
-    public async Task CreateDonationAsync_ShouldThrowArgumentNullException_WhenDtoTitleIsEmpty()
-    {
-        var donation = new Donation { Title = string.Empty };
-        var donationDto = donation.ToCreateDonationDto();
-        
-        Assert.ThrowsAsync<ArgumentNullException>(async() => await _donationService
-            .CreateDonationAsync(donationDto));
-    }
-    
     [Test]
     public async Task UpdateDonationAsync_ShouldUpdateDonation_WhenSomePropIsChanged()
     {

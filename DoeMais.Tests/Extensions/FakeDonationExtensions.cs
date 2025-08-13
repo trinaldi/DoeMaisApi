@@ -12,8 +12,7 @@ public static class FakeDonationExtensions
         {
             DonationId = fakeDonation.DonationId,
             UserId = fakeDonation.UserId,
-            AddressId = fakeDonation.AddressId,
-            Address = fakeDonation.FakeAddress.ToEntity(),
+            AddressSnapshot = fakeDonation.FakeAddress.ToAddressSnapshot(),
             Title = fakeDonation.Title,
             Description = fakeDonation.Description,
             Quantity = fakeDonation.Quantity,
@@ -29,12 +28,12 @@ public static class FakeDonationExtensions
         {
             DonationId = fakeDonation.DonationId,
             UserId = fakeDonation.UserId,
-            AddressId = fakeDonation.AddressId,
             Title = fakeDonation.Title,
             Description = fakeDonation.Description,
             Quantity = fakeDonation.Quantity,
             Status = fakeDonation.Status,
             Category = fakeDonation.Category,
+            AddressSnapshot = fakeDonation.FakeAddress.ToAddressSnapshot(),
             Images = fakeDonation.Images
         };
     }
