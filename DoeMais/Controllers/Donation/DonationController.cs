@@ -88,4 +88,18 @@ public class DonationController : ControllerBase
             _ => StatusCode(StatusCodes.Status500InternalServerError)
         };
     }
+
+    [Authorize]
+    [HttpPut("{donationId:long}/status")]
+    public async Task<IActionResult> ChangeStatus(long donationId, DonationStatusDto statusDto)
+    {
+        var result = await _donationService.ChangeStatusAsync(donationId, statusDto);
+        
+        return result.Type switch
+        {
+            ResultType.NotFound => NotFound(result),
+            ResultType.Success => Ok(result),
+            _ => StatusCode(StatusCodes.Status500InternalServerError)
+        };
+    }
 }

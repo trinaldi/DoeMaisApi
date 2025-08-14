@@ -10,4 +10,5 @@ public interface IDonationService
     Task<Result<DonationDto?>> GetDonationByIdAsync(long id);
     Task<Result<DonationDto?>> UpdateDonationAsync(long donationId, UpdateDonationDto donation);
     Task<Result<bool>> DeleteDonationAsync(long id);
+    Task<Result<bool>> ChangeStatusAsync(long donationId, DonationStatusDto statusDto);
 }

@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DoeMais.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250812112456_AddCategoryPropertyToDonation")]
-    partial class AddCategoryPropertyToDonation
+    [Migration("20250814133647_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
