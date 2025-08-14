@@ -1,5 +1,6 @@
 using DoeMais.Data;
 using DoeMais.Domain.Entities;
+using DoeMais.Domain.Enums;
 using DoeMais.Extensions;
 using DoeMais.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -54,6 +55,7 @@ public class DonationRepository : IDonationRepository
         return true;
     }
 
+
     public async Task<Donation?> UpdateDonationAsync(long donationId, Donation donation)
     {
         var existingDonation = await _ctx.Donations
@@ -67,4 +69,5 @@ public class DonationRepository : IDonationRepository
             .Include(d => d.Address)
             .FirstOrDefaultAsync(d => d.DonationId == donation.DonationId);
     }
+    public async Task SaveChangesAsync() => await _ctx.SaveChangesAsync();
 }

@@ -70,4 +70,15 @@ public class DonationService : IDonationService
             ? new Result<bool>(ResultType.Success, success)
             : new Result<bool>(ResultType.Error, success);
     }
+    public async Task<Result<bool>> ChangeStatusAsync(long donationId, DonationStatusDto statusDto)
+    {
+        var foundDonation = await _donationRepository.GetDonationByIdAsync(donationId);
+        if (foundDonation == null) return new Result<bool>(ResultType.NotFound, false, "Donation could not be found.");
+
+        foundDonation.Status = statusDto.ToStatus();
+        await _donationRepository.SaveChangesAsync();
+        return new Result<bool>(ResultType.Success, true);
+    }
+
+
 }
