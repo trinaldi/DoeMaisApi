@@ -1,5 +1,4 @@
 using DoeMais.Domain.Entities;
-using DoeMais.Domain.Enums;
 using DoeMais.DTOs.Donation;
 
 namespace DoeMais.Extensions;
@@ -17,6 +16,8 @@ public static class DonationExtensions
             Quantity = donation.Quantity,
             Status = donation.Status,
             Category = donation.Category,
+            PickupAddress = donation.PickupAddress.ToDto(),
+            DeliveryAddress = donation.DeliveryAddress.ToDto(),
             Images = new List<string>(donation.Images)
         };
     } 
@@ -28,6 +29,7 @@ public static class DonationExtensions
         donation.Quantity = dto.Quantity ?? donation.Quantity;
         donation.Status = dto.Status ?? donation.Status;
         donation.Category = dto.Category ?? donation.Category;
+        donation.Images = dto.Images ?? donation.Images;
     }
 
     public static void UpdateFrom(this Donation target, Donation source)
@@ -40,7 +42,7 @@ public static class DonationExtensions
         target.Images = source.Images;
     }
     
-    public static Donation Clone(this Donation? donation)
+    public static Donation? Clone(this Donation? donation)
     {
         if (donation is null)
         {
@@ -56,7 +58,8 @@ public static class DonationExtensions
             Quantity = donation.Quantity,
             Status = donation.Status,
             Category = donation.Category,
-            Address = donation.Address,
+            PickupAddress = donation.PickupAddress,
+            DeliveryAddress = donation.DeliveryAddress,
             Images = donation.Images,
             User = donation.User
         };
@@ -71,7 +74,7 @@ public static class DonationExtensions
             Quantity = donation.Quantity,
             Status = donation.Status,
             Category = donation.Category,
-            Images = donation.Images?.ToList() ?? new List<string>()
+            Images = donation.Images?.ToList() ?? []
         };
     }
 }

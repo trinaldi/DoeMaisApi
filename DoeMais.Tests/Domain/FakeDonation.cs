@@ -7,7 +7,8 @@ public class FakeDonation
 {
     public long DonationId { get; set; }
     public long UserId { get; set; }
-    public FakeAddress FakeAddress { get; set; }
+    public FakeAddress FakePickupAddress { get; set; }
+    public FakeAddress FakeDeliveryAddress { get; set; }
     public string Title { get; set; } = "";
     public string Description { get; set; } = "";
     public int? Quantity { get; set; }
@@ -54,12 +55,11 @@ public class FakeDonation
         return faker.Generate(qty);
     } 
     
-    public FakeDonation WithAddress(FakeAddress? address = null)
+    public FakeDonation WithAddress(FakeAddress? pickupAddress = null, FakeAddress? deliveryAddress = null)
     {
-        var donationId = this.DonationId;
-        address ??= FakeAddress.Create();
-
-        this.FakeAddress = address;
+        this.FakePickupAddress = pickupAddress ?? FakeAddress.Create();
+        this.FakeDeliveryAddress = deliveryAddress ?? FakeAddress.Create();
+    
         return this;
     }
 }

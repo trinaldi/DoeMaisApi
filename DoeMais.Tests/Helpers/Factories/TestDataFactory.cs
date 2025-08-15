@@ -54,7 +54,8 @@ public static class TestDataFactory
             {
                 var donation = FakeDonation.Create().WithAddress().ToEntity();
                 donation.UserId = userId;
-                donation.Address = FakeAddress.Create().ToEntity();
+                donation.PickupAddress = FakeAddress.Create().ToEntity();
+                donation.DeliveryAddress = FakeAddress.Create().ToEntity();
                 return donation;
             })
             .ToList();

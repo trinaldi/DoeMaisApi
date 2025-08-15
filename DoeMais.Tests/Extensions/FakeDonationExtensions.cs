@@ -12,7 +12,8 @@ public static class FakeDonationExtensions
         {
             DonationId = fakeDonation.DonationId,
             UserId = fakeDonation.UserId,
-            Address = fakeDonation.FakeAddress.ToEntity(),
+            PickupAddress = fakeDonation.FakePickupAddress.ToEntity(),
+            DeliveryAddress = fakeDonation.FakeDeliveryAddress.ToEntity(),
             Title = fakeDonation.Title,
             Description = fakeDonation.Description,
             Quantity = fakeDonation.Quantity,
@@ -33,6 +34,8 @@ public static class FakeDonationExtensions
             Quantity = fakeDonation.Quantity,
             Status = fakeDonation.Status,
             Category = fakeDonation.Category,
+            PickupAddress = fakeDonation.FakePickupAddress.ToDto(),
+            DeliveryAddress = fakeDonation.FakeDeliveryAddress.ToDto(),
             Images = fakeDonation.Images
         };
     }

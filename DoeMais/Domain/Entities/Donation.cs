@@ -11,7 +11,8 @@ public class Donation : IUserOwned
     public long UserId { get; set; }
     
     public User User { get; set; }
-    public Address Address { get; set; }
+    public Address PickupAddress { get; set; }
+    public Address DeliveryAddress { get; set; }
     public Category Category { get; set; }
     
     public string Title { get; set; }

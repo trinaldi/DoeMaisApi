@@ -75,28 +75,28 @@ public class AppDbContext : DbContext
             });
         });
         
-        //modelBuilder.Entity<Donation>(donation =>
-        //{
-        //    donation.OwnsOne(d => d.PickupAddress, address =>
-        //    {
-        //        address.Property(a => a.Street).HasMaxLength(200);
-        //        address.Property(a => a.Complement).HasMaxLength(100);
-        //        address.Property(a => a.Neighborhood).HasMaxLength(100);
-        //        address.Property(a => a.City).HasMaxLength(100);
-        //        address.Property(a => a.State).HasMaxLength(50);
-        //        address.Property(a => a.ZipCode).HasMaxLength(20);
-        //    });
+        modelBuilder.Entity<Donation>(donation =>
+        {
+            donation.OwnsOne(d => d.PickupAddress, address =>
+            {
+                address.Property(a => a.Street).HasMaxLength(200);
+                address.Property(a => a.Complement).HasMaxLength(100);
+                address.Property(a => a.Neighborhood).HasMaxLength(100);
+                address.Property(a => a.City).HasMaxLength(100);
+                address.Property(a => a.State).HasMaxLength(50);
+                address.Property(a => a.ZipCode).HasMaxLength(20);
+            });
 
-        //    donation.OwnsOne(d => d.DeliveryAddress, address =>
-        //    {
-        //        address.Property(a => a.Street).HasMaxLength(200);
-        //        address.Property(a => a.Complement).HasMaxLength(100);
-        //        address.Property(a => a.Neighborhood).HasMaxLength(100);
-        //        address.Property(a => a.City).HasMaxLength(100);
-        //        address.Property(a => a.State).HasMaxLength(50);
-        //        address.Property(a => a.ZipCode).HasMaxLength(20);
-        //    });
-        //});
+            donation.OwnsOne(d => d.DeliveryAddress, address =>
+            {
+                address.Property(a => a.Street).HasMaxLength(200);
+                address.Property(a => a.Complement).HasMaxLength(100);
+                address.Property(a => a.Neighborhood).HasMaxLength(100);
+                address.Property(a => a.City).HasMaxLength(100);
+                address.Property(a => a.State).HasMaxLength(50);
+                address.Property(a => a.ZipCode).HasMaxLength(20);
+            });
+        });
         
         modelBuilder.Entity<Donation>().HasQueryFilter(d => d.UserId == _currentUserService.UserId);
         
