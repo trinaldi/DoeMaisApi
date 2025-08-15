@@ -4,7 +4,6 @@ namespace DoeMais.DTOs.Address;
 
 public record AddressDto
 {
-    public long AddressId { get; init; }
     public string? Street { get; init; }
     public string? Complement { get; init; }
     public string? Neighborhood { get; init; }

@@ -13,5 +13,5 @@ public record UpdateUserDto
     [RegularExpression(@"^\d{11}$", ErrorMessage = "Phone number must be exactly 11 digits, e.g. 99999999999.")]
     public string? Phone { get; init; } = "";
 
-    public ICollection<AddressDto> Addresses { get; init; } = [];
+    public AddressDto? AddressDto { get; set; }
 }

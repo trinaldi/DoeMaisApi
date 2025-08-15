@@ -1,11 +1,8 @@
 using System.Security.Claims;
 using DoeMais.Common;
-using DoeMais.Controllers.Address;
 using DoeMais.Controllers.Donation;
 using DoeMais.Domain.Enums;
-using DoeMais.DTOs.Address;
 using DoeMais.DTOs.Donation;
-using DoeMais.Extensions;
 using DoeMais.Services.Interfaces;
 using DoeMais.Tests.Domain;
 using DoeMais.Tests.Extensions;

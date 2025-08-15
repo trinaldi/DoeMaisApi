@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using DoeMais.Repositories;
-using DoeMais.Data;
 using DoeMais.Domain.Entities;
 using DoeMais.Extensions;
+using DoeMais.Infrastructure;
 using DoeMais.Repositories.Interfaces;
 using DoeMais.Services.Query;
 using DoeMais.Tests.Domain;

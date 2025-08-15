@@ -11,7 +11,6 @@ public record DonationDto
     public long DonationId { get; init; }
     
     public long UserId { get; init; }
-    public long AddressId { get; init; }
     public string? Title { get; init; }
     public string? Description { get; init; }
     public int? Quantity { get; init; }

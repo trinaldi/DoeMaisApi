@@ -1,3 +1,4 @@
+using DoeMais.Domain.OwnedTypes;
 using DoeMais.Domain.ValueObjects;
 
 namespace DoeMais.Domain.Entities;
@@ -10,7 +11,7 @@ public class User
     public string Email { get; set; } = default!;
     public string Phone { get; set; } = "";
     public Cpf Cpf { get; set; }
-    public ICollection<Address> Addresses { get; set; } = [];
+    public Address Address { get; set; }
     public ICollection<Donation> Donations { get; set; } = [];
     public string PasswordHash { get; set; } = default!;
     

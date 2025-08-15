@@ -11,7 +11,6 @@ public static class DonationExtensions
         return new DonationDto
         {
             DonationId = donation.DonationId,
-            AddressId = donation.AddressId,
             UserId = donation.UserId,
             Title = donation.Title,
             Description = donation.Description,
@@ -29,9 +28,6 @@ public static class DonationExtensions
         donation.Quantity = dto.Quantity ?? donation.Quantity;
         donation.Status = dto.Status ?? donation.Status;
         donation.Category = dto.Category ?? donation.Category;
-
-        if (dto.AddressId != 0 && dto.AddressId != donation.AddressId)
-            donation.AddressId = dto.AddressId;
     }
 
     public static void UpdateFrom(this Donation target, Donation source)
@@ -54,7 +50,6 @@ public static class DonationExtensions
         return new Donation
         {
             DonationId = donation.DonationId,
-            AddressId = donation.AddressId,
             UserId = donation.UserId,
             Title = donation.Title,
             Description = donation.Description,
@@ -71,7 +66,6 @@ public static class DonationExtensions
         return new CreateDonationDto
         {
             UserId = donation.UserId,
-            AddressId = donation.AddressId,
             Title = donation.Title,
             Description = donation.Description,
             Quantity = donation.Quantity,

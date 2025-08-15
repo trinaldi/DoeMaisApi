@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
-using DoeMais.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using DoeMais.Authorization.Handlers;
 using DoeMais.Authorization.Requirements;
-using DoeMais.Data.Interceptors;
+using DoeMais.Infrastructure;
+using DoeMais.Infrastructure.Interceptors;
 using DoeMais.Repositories;
 using DoeMais.Repositories.Interfaces;
 using DoeMais.Services;
@@ -87,8 +87,6 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IDonationRepository, DonationRepository>();
 builder.Services.AddScoped<IDonationService, DonationService>();
-builder.Services.AddScoped<IAddressRepository, AddressRepository>();
-builder.Services.AddScoped<IAddressService, AddressService>();
 
 var app = builder.Build();
 

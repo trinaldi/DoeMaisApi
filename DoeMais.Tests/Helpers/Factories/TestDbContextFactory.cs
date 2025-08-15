@@ -1,5 +1,4 @@
-using DoeMais.Data;
-using DoeMais.Data.Interceptors;
+using DoeMais.Infrastructure;
 using DoeMais.Services.Query;
 using Microsoft.EntityFrameworkCore;
 

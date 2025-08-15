@@ -1,7 +1,7 @@
-using DoeMais.Data;
 using DoeMais.Domain.Entities;
 using DoeMais.Domain.Enums;
 using DoeMais.Extensions;
+using DoeMais.Infrastructure;
 using DoeMais.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 

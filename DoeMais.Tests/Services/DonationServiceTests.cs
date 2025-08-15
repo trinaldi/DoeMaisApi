@@ -103,7 +103,6 @@ public class DonationServiceTests
         {
             Assert.That(result, Is.Not.Null);
             Assert.That(result!.Data!.UserId, Is.EqualTo(createDonationDto.UserId));
-            Assert.That(result!.Data!.AddressId, Is.EqualTo(createDonationDto.AddressId));
             Assert.That(result!.Data!.Title, Is.EqualTo(createDonationDto.Title));
             Assert.That(result!.Data!.Description, Is.EqualTo(createDonationDto.Description));
             Assert.That(result!.Data!.Quantity, Is.EqualTo(createDonationDto.Quantity));

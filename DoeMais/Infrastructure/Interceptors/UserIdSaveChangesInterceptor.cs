@@ -3,7 +3,7 @@ using DoeMais.Services.Query;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
-namespace DoeMais.Data.Interceptors;
+namespace DoeMais.Infrastructure.Interceptors;
 
 public class UserIdSaveChangesInterceptor : SaveChangesInterceptor
 {

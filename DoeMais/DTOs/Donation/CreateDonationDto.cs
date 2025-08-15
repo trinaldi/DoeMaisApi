@@ -6,7 +6,6 @@ namespace DoeMais.DTOs.Donation;
 public record CreateDonationDto
 {
     public long UserId { get; init; }
-    public long AddressId { get; init; }
     
     [Required]
     [StringLength(100, ErrorMessage = "Title must be at most 100 characters.")]

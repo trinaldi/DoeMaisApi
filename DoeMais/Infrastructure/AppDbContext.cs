@@ -1,22 +1,19 @@
-using DoeMais.Data.Interceptors;
-using DoeMais.Domain;
-using Microsoft.EntityFrameworkCore;
 using DoeMais.Domain.Entities;
+using DoeMais.Domain.OwnedTypes;
 using DoeMais.Domain.ValueObjects;
+using DoeMais.Infrastructure.Interceptors;
 using DoeMais.Services.Query;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace DoeMais.Data;
+namespace DoeMais.Infrastructure;
 
 public class AppDbContext : DbContext
 {
     private readonly ICurrentUserService _currentUserService;
     private readonly UserIdSaveChangesInterceptor _userIdInterceptor;
     
-    public AppDbContext()
-    {
-        
-    }
+    public AppDbContext() { }
     public AppDbContext(DbContextOptions<AppDbContext> options, ICurrentUserService currentUserService)
         : base(options)
     {
@@ -64,14 +61,44 @@ public class AppDbContext : DbContext
                 .HasMaxLength(11);
         });
         
-        modelBuilder.Entity<Address>().HasQueryFilter(a => a.UserId == _currentUserService.UserId);
-        modelBuilder.Entity<Donation>().HasQueryFilter(d => d.UserId == _currentUserService.UserId);
+        modelBuilder.Ignore<Address>();
+        modelBuilder.Entity<User>(user =>
+        {
+            user.OwnsOne(u => u.Address, address =>
+            {
+                address.Property(a => a.Street).HasMaxLength(200);
+                address.Property(a => a.Complement).HasMaxLength(100);
+                address.Property(a => a.Neighborhood).HasMaxLength(100);
+                address.Property(a => a.City).HasMaxLength(100);
+                address.Property(a => a.State).HasMaxLength(50);
+                address.Property(a => a.ZipCode).HasMaxLength(20);
+            });
+        });
         
-        modelBuilder.Entity<User>()
-            .HasMany(u => u.Addresses)
-            .WithOne(a => a.User)
-            .HasForeignKey(a => a.UserId)
-            .OnDelete(DeleteBehavior.Cascade);
+        //modelBuilder.Entity<Donation>(donation =>
+        //{
+        //    donation.OwnsOne(d => d.PickupAddress, address =>
+        //    {
+        //        address.Property(a => a.Street).HasMaxLength(200);
+        //        address.Property(a => a.Complement).HasMaxLength(100);
+        //        address.Property(a => a.Neighborhood).HasMaxLength(100);
+        //        address.Property(a => a.City).HasMaxLength(100);
+        //        address.Property(a => a.State).HasMaxLength(50);
+        //        address.Property(a => a.ZipCode).HasMaxLength(20);
+        //    });
+
+        //    donation.OwnsOne(d => d.DeliveryAddress, address =>
+        //    {
+        //        address.Property(a => a.Street).HasMaxLength(200);
+        //        address.Property(a => a.Complement).HasMaxLength(100);
+        //        address.Property(a => a.Neighborhood).HasMaxLength(100);
+        //        address.Property(a => a.City).HasMaxLength(100);
+        //        address.Property(a => a.State).HasMaxLength(50);
+        //        address.Property(a => a.ZipCode).HasMaxLength(20);
+        //    });
+        //});
+        
+        modelBuilder.Entity<Donation>().HasQueryFilter(d => d.UserId == _currentUserService.UserId);
         
         modelBuilder.Entity<User>()
             .HasMany(u => u.Donations)
@@ -79,13 +106,6 @@ public class AppDbContext : DbContext
             .HasForeignKey(u => u.UserId)
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
-        
-        modelBuilder.Entity<Donation>()
-            .HasOne(d => d.Address)
-            .WithMany(a => a.Donations)
-            .HasForeignKey(d => d.AddressId)
-            .IsRequired()
-            .OnDelete(DeleteBehavior.Restrict);
         
         modelBuilder.Entity<Donation>()
             .Property(d => d.Category)
@@ -145,7 +165,6 @@ public class AppDbContext : DbContext
     // I've set these to virtual because of the tests. Mocks need these
     // properties to be set as `virtual`, there is no lazy loading here.
     public virtual DbSet<User> Users => Set<User>();
-    public virtual DbSet<Address> Addresses => Set<Address>();
     public virtual DbSet<Role> Roles => Set<Role>();
     public virtual DbSet<UserRole> UserRoles => Set<UserRole>();
     public virtual DbSet<Donation> Donations => Set<Donation>();

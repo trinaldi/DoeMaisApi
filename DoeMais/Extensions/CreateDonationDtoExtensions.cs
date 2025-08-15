@@ -10,7 +10,6 @@ public static class CreateDonationDtoExtensions
         return new Donation
         {
             UserId = dto.UserId,
-            AddressId = dto.AddressId,
             Title = dto.Title,
             Description = dto.Description ?? "",
             Quantity = dto.Quantity ?? 1,

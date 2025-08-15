@@ -1,6 +1,6 @@
-using DoeMais.Data;
 using DoeMais.Domain.Entities;
 using DoeMais.Extensions;
+using DoeMais.Infrastructure;
 using DoeMais.Repositories;
 using DoeMais.Services.Query;
 using DoeMais.Tests.Domain;
@@ -186,9 +186,7 @@ public class DonationRepositoryTests
      public async Task DeleteDonationAsync_ShouldNotDeleteOtherAddresses_WhenDeletingSpecificAddress()
      {
          var firstDonation = FakeDonation.Create().WithAddress().ToEntity();
-         firstDonation.Address.AddressId = 1;
          var secondDonation = FakeDonation.Create().WithAddress().ToEntity();
-         firstDonation.Address.AddressId = 2;
          await _repository.CreateDonationAsync(firstDonation);
          await _repository.CreateDonationAsync(secondDonation);
 

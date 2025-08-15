@@ -1,4 +1,5 @@
 using DoeMais.Domain.Entities;
+using DoeMais.Domain.OwnedTypes;
 using DoeMais.DTOs.Address;
 
 namespace DoeMais.Extensions;
@@ -9,7 +10,6 @@ public static class AddressExtensions
     {
         return new AddressDto
         {
-            AddressId = address.AddressId,
             Street = address.Street,
             Complement = address.Complement,
             Neighborhood = address.Neighborhood,
@@ -24,7 +24,6 @@ public static class AddressExtensions
     {
         return new Address
         {
-            AddressId = dto.AddressId,
             Street = dto.Street,
             Complement = dto.Complement,
             Neighborhood = dto.Neighborhood,
@@ -65,8 +64,6 @@ public static class AddressExtensions
 
         return new Address
         {
-            AddressId = address.AddressId,
-            UserId = address.UserId,
             Street = address.Street ?? "",
             Complement = address.Complement,
             Neighborhood = address.Neighborhood ?? "",
@@ -74,7 +71,6 @@ public static class AddressExtensions
             State = address.State ?? "",
             ZipCode = address.ZipCode ?? "",
             IsPrimary = address.IsPrimary,
-            Donations = address.Donations
         };
     }
     

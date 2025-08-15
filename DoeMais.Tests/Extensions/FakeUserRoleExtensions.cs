@@ -1,6 +1,8 @@
 using DoeMais.Domain.Entities;
 using DoeMais.Tests.Domain;
 
+namespace DoeMais.Tests.Extensions;
+
 public static class FakeUserRoleExtensions
 {
     public static UserRole ToUserRole(this FakeUserRole fakeUserRole)

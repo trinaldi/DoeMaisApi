@@ -5,7 +5,6 @@ namespace DoeMais.DTOs.Donation;
 
 public record UpdateDonationDto
 {
-    public long AddressId { get; init; }
     public long UserId { get; init; }
     public long DonationId { get; init; }
     

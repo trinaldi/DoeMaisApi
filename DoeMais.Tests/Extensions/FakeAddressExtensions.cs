@@ -1,4 +1,5 @@
 using DoeMais.Domain.Entities;
+using DoeMais.Domain.OwnedTypes;
 using DoeMais.DTOs.Address;
 using DoeMais.Tests.Domain;
 
@@ -10,7 +11,6 @@ public static class FakeAddressExtensions
     {
         var address = new Address
         {
-            AddressId = fakeAddress.AddressId,
             Street = fakeAddress.Street ?? "",
             Complement = fakeAddress.Complement,
             Neighborhood = fakeAddress.Neighborhood ?? "",
@@ -18,22 +18,7 @@ public static class FakeAddressExtensions
             State = fakeAddress.State ?? "",
             ZipCode = fakeAddress.ZipCode ?? "",
             IsPrimary = fakeAddress.IsPrimary,
-            Donations = new List<Donation>()
         };
-        
-        address.Donations = 
-            fakeAddress
-            .FakeDonations
-            .Select(d => new Donation
-            {
-                DonationId = d.DonationId,
-                AddressId = d.AddressId,
-                Title = d.Title,
-                Description = d.Description,
-                Quantity = d.Quantity,
-                Status = d.Status,
-                Images = d.Images,
-            }).ToList();
         
         return address;
     }
@@ -43,7 +28,6 @@ public static class FakeAddressExtensions
         
         var dto = new AddressDto
         {
-            AddressId = fakeAddress.AddressId,
             Street = fakeAddress.Street ?? "",
             Complement = fakeAddress.Complement,
             Neighborhood = fakeAddress.Neighborhood ?? "",
