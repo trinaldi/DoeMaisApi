@@ -11,4 +11,5 @@ public interface IDonationRepository
     Task<Donation?> UpdateDonationAsync(long donationId, Donation donation);
     Task<bool> DeleteDonationAsync(long id);
     Task SaveChangesAsync();
+    Task<List<Donation>?> GetDonationsByCategoryAsync(int category);
 }

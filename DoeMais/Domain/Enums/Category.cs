@@ -19,7 +19,7 @@ public enum Category
     [Display(Name = "Material Escolar")]
     MaterialEscolar,
     [Display(Name = "Móveis")]
-    Móveis,
+    Moveis,
     [Display(Name = "Vestuário")]
     Vestuario,
     [Display(Name = "Outros")]

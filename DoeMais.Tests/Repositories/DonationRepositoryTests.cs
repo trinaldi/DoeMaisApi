@@ -1,4 +1,5 @@
 using DoeMais.Domain.Entities;
+using DoeMais.Domain.Enums;
 using DoeMais.Extensions;
 using DoeMais.Infrastructure;
 using DoeMais.Repositories;
@@ -199,6 +200,56 @@ public class DonationRepositoryTests
          {
              Assert.That(firstDonationPresence, Is.True);
              Assert.That(secondDonationPresence, Is.False);
+         });
+     }
+
+     [Test]
+     public async Task GetDonationsByCategoryAsync_ShouldReturnSpecificDonations_WhenCategoryIsPresent()
+     {
+         const int numOfToys = 3;
+         var donations = FakeDonation
+             .CreateMany(qty: 5).Select(d => d.WithAddress().ToEntity())
+             .ToList();
+         
+         donations[0].Category = Category.Brinquedos;
+         donations[1].Category = Category.Brinquedos;
+         donations[2].Category = Category.Brinquedos;
+         donations[3].Category = Category.Eletrodomesticos;
+         donations[4].Category = Category.Eletrodomesticos;
+         await _context.AddRangeAsync(donations);
+         await _context.SaveChangesAsync();
+
+         var result = await _repository.GetDonationsByCategoryAsync((int)Category.Brinquedos);
+         
+        Assert.Multiple(() =>
+        {
+            Assert.That(result?.Count, Is.EqualTo(numOfToys));
+            Assert.That(result.All(d => d.Category == Category.Brinquedos));
+        });
+    }
+     
+     [Test]
+     public async Task GetDonationsByCategoryAsync_ShouldReturnAnEmptyList_WhenCategoryDoesNotExist()
+     {
+         const int categoryWithNoDonations = (int)Category.Moveis;
+         var donations = FakeDonation
+             .CreateMany(qty: 5).Select(d => d.WithAddress().ToEntity())
+             .ToList();
+         
+         donations[0].Category = Category.Brinquedos;
+         donations[1].Category = Category.Brinquedos;
+         donations[2].Category = Category.Brinquedos;
+         donations[3].Category = Category.Eletrodomesticos;
+         donations[4].Category = Category.Eletrodomesticos;
+         await _context.AddRangeAsync(donations);
+         await _context.SaveChangesAsync();
+
+         var result = await _repository.GetDonationsByCategoryAsync(categoryWithNoDonations);
+         
+         Assert.Multiple(() =>
+         {
+             Assert.That(result?.Count, Is.EqualTo(0));
+             Assert.That(result, Is.Empty);
          });
      }
 }

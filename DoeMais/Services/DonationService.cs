@@ -79,6 +79,17 @@ public class DonationService : IDonationService
         await _donationRepository.SaveChangesAsync();
         return new Result<bool>(ResultType.Success, true);
     }
+    public async Task<Result<List<DonationDto>>> GetDonationsByCategoryAsync(int category)
+    {
+        var isCategory = Enum.IsDefined(typeof(Category), category);
+        if (!isCategory)
+            return new Result<List<DonationDto>>(ResultType.NotFound, []);
+        
+        var donations = await _donationRepository.GetDonationsByCategoryAsync(category);
+        var donationsDto = donations?.Select(d => d.ToDto()).ToList();
+
+        return new Result<List<DonationDto>>(ResultType.Success, donationsDto);
+    }
 
 
 }

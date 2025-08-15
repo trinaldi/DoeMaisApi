@@ -102,4 +102,18 @@ public class DonationController : ControllerBase
             _ => StatusCode(StatusCodes.Status500InternalServerError)
         };
     }
+
+    [Authorize]
+    [HttpGet]
+    public async Task<IActionResult> GetDonationsByCategory([FromQuery] int category)
+    {
+        var result = await _donationService.GetDonationsByCategoryAsync(category);
+        
+        return result.Type switch
+        {
+            ResultType.NotFound => NotFound(result),
+            ResultType.Success => Ok(result),
+            _ => StatusCode(StatusCodes.Status500InternalServerError)
+        };
+    }
 }

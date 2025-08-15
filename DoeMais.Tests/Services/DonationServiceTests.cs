@@ -114,7 +114,8 @@ public class DonationServiceTests
     [Test]
     public async Task CreateDonationAsync_ShouldThrowArgumentNullException_WhenDtoTitleIsEmpty()
     {
-        var donation = new Donation { Title = string.Empty };
+        var donation = FakeDonation.Create().WithAddress().ToEntity();
+        donation.Title = string.Empty;
         var donationDto = donation.ToCreateDonationDto();
         
         Assert.ThrowsAsync<ArgumentNullException>(async() => await _donationService
@@ -193,6 +194,44 @@ public class DonationServiceTests
         var result = await _donationService.DeleteDonationAsync(bogusDonationId);
         
         Assert.That(result.Data, Is.EqualTo(false));
+    }
+
+    [Test]
+    public async Task GetDonationsByCategoryAsync_ShouldReturnSpecificDonations_WhenCategoryExist()
+    {
+        const Category category = Category.Brinquedos;
+        const int categoryInt = (int)category;
+        var donations = FakeDonation.CreateMany(qty: 3)
+            .Select(d => d.WithAddress().ToEntity()).ToList();
+        donations.ForEach(d => d.Category = category);
+        _donationRepositoryMock.Setup(r => r.GetDonationsByCategoryAsync(categoryInt))
+            .ReturnsAsync(donations);
+
+        var result = await _donationService.GetDonationsByCategoryAsync(categoryInt);
+        
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result!.Data!.All(d => d.Category == category));
+        });
+    }
+    
+    [Test]
+    public async Task GetDonationsByCategoryAsync_ShouldReturnAnEmptyList_WhenCategoryDoesNotExist()
+    {
+        const Category categoryWithNoDonation = Category.Moveis;
+        const int categoryWithNoDonationInt = (int)categoryWithNoDonation;
+        var donations = new List<Donation>();
+        _donationRepositoryMock.Setup(r => r.GetDonationsByCategoryAsync(categoryWithNoDonationInt))
+            .ReturnsAsync(donations);
+
+        var result = await _donationService.GetDonationsByCategoryAsync(categoryWithNoDonationInt);
+        
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result!.Data!, Is.Empty);
+        });
     }
 
 }

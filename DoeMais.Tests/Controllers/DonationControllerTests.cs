@@ -7,6 +7,7 @@ using DoeMais.Services.Interfaces;
 using DoeMais.Tests.Domain;
 using DoeMais.Tests.Extensions;
 using DoeMais.Tests.Helpers.Asserts;
+using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -236,6 +237,48 @@ public class DonationControllerTests
         {
             Assert.That(result, Is.InstanceOf<NotFoundObjectResult>());
             Assert.That(resultDto?.Data, Is.False);
+        });
+    }
+    
+    [Test]
+    public async Task GetDonationsByCategory_ShouldReturnSuccessAndSpecificDonations_WhenCategoryExists()
+    {
+        const Category category = Category.Brinquedos;
+        const int categoryInt = (int)category;
+        var donations = FakeDonation.CreateMany(qty: 3)
+            .Select(d => d.WithAddress().ToDto()).ToList();
+        donations.ForEach(d => d.Category = category);
+        _donationServiceMock.Setup(s => s.GetDonationsByCategoryAsync(categoryInt))
+            .ReturnsAsync(new Result<List<DonationDto>>(ResultType.Success, donations));
+        
+        var result = await _donationController.GetDonationsByCategory(categoryInt);
+        var okObjectResult = (OkObjectResult)result;
+        var resultDto = okObjectResult.Value as Result<List<DonationDto>>;
+        
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.InstanceOf<OkObjectResult>());
+            resultDto.Data.Should().BeEquivalentTo(donations);
+        });
+    }
+    
+    [Test]
+    public async Task GetDonationsByCategory_ShouldReturnNotFound_WhenCategoryDoesNotExists()
+    {
+        const Category categoryWithNoDonation = Category.Moveis;
+        const int categoryWithNoDonationInt = (int)categoryWithNoDonation;
+        var donations = new List<DonationDto>();
+        _donationServiceMock.Setup(s => s.GetDonationsByCategoryAsync(categoryWithNoDonationInt))
+            .ReturnsAsync(new Result<List<DonationDto>>(ResultType.NotFound, donations));
+        
+        var result = await _donationController.GetDonationsByCategory(categoryWithNoDonationInt);
+        var okObjectResult = (NotFoundObjectResult)result;
+        var resultDto = okObjectResult.Value as Result<List<DonationDto>>;
+        
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.InstanceOf<NotFoundObjectResult>());
+            Assert.That(resultDto.Data, Is.Empty);
         });
     }
     

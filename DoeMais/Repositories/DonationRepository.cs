@@ -66,4 +66,12 @@ public class DonationRepository : IDonationRepository
             .FirstOrDefaultAsync(d => d.DonationId == donation.DonationId);
     }
     public async Task SaveChangesAsync() => await _ctx.SaveChangesAsync();
+    public async Task<List<Donation>?> GetDonationsByCategoryAsync(int category)
+    {
+        var categoryEnum = (Category)category;
+        var donations = await _ctx.Donations
+            .Where(d => d.Category == categoryEnum).ToListAsync();
+
+        return donations;
+    }
 }
