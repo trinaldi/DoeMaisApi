@@ -74,6 +74,8 @@ public static class DonationExtensions
             Quantity = donation.Quantity,
             Status = donation.Status,
             Category = donation.Category,
+            PickupAddress = donation.PickupAddress.ToDto(),
+            DeliveryAddress = donation.DeliveryAddress.ToDto(),
             Images = donation.Images?.ToList() ?? []
         };
     }

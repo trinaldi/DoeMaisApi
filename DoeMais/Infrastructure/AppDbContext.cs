@@ -34,6 +34,8 @@ public class AppDbContext : DbContext
 
         foreach (var entityType in modelBuilder.Model.GetEntityTypes())
         {
+            if (entityType.IsOwned()) continue;
+            
             modelBuilder.Entity(entityType.ClrType)
                 .Property<DateTime>("CreatedAt")
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
@@ -148,7 +150,7 @@ public class AppDbContext : DbContext
     private void UpdateTimestamps()
     {
         var entries = ChangeTracker.Entries()
-            .Where(e => e.State is EntityState.Added or EntityState.Modified);
+            .Where(e => !e.Metadata.IsOwned() && (e.State == EntityState.Added || e.State == EntityState.Modified));
 
         foreach (var entry in entries)
         {

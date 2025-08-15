@@ -6,6 +6,7 @@ using DoeMais.Services.Query;
 using DoeMais.Tests.Domain;
 using DoeMais.Tests.Extensions;
 using DoeMais.Tests.Helpers.Factories;
+using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 
@@ -42,8 +43,7 @@ public class DonationRepositoryTests
         Assert.Multiple(() =>
         {
             Assert.That(result, Is.Not.Null);
-            Assert.That(result?.DonationId, Is.EqualTo(donation.DonationId));
-            Assert.That(result?.UserId, Is.EqualTo(donation.UserId));
+            result.Should().BeEquivalentTo(donation);
         });
 
     }
