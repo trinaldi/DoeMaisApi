@@ -3,6 +3,7 @@ using System;
 using DoeMais.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DoeMais.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250815132127_InitialWithOwnedTypes")]
+    partial class InitialWithOwnedTypes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -207,7 +210,7 @@ namespace DoeMais.Migrations
                                 .HasMaxLength(100)
                                 .HasColumnType("character varying(100)");
 
-                            b1.Property<bool?>("IsPrimary")
+                            b1.Property<bool>("IsPrimary")
                                 .HasColumnType("boolean");
 
                             b1.Property<string>("Neighborhood")
@@ -247,7 +250,7 @@ namespace DoeMais.Migrations
                                 .HasMaxLength(100)
                                 .HasColumnType("character varying(100)");
 
-                            b1.Property<bool?>("IsPrimary")
+                            b1.Property<bool>("IsPrimary")
                                 .HasColumnType("boolean");
 
                             b1.Property<string>("Neighborhood")
@@ -298,7 +301,7 @@ namespace DoeMais.Migrations
                                 .HasMaxLength(100)
                                 .HasColumnType("character varying(100)");
 
-                            b1.Property<bool?>("IsPrimary")
+                            b1.Property<bool>("IsPrimary")
                                 .HasColumnType("boolean");
 
                             b1.Property<string>("Neighborhood")

@@ -1,6 +1,7 @@
 using DoeMais.Domain.Enums;
 using System.Collections.Generic;
 using DoeMais.Domain.Interfaces;
+using DoeMais.Domain.OwnedTypes;
 
 namespace DoeMais.Domain.Entities;
 
@@ -8,10 +9,10 @@ public class Donation : IUserOwned
 {
     public long DonationId { get; set; }
     public long UserId { get; set; }
-    public long AddressId { get; set; }
     
     public User User { get; set; }
-    public Address Address { get; set; }
+    public Address PickupAddress { get; set; }
+    public Address DeliveryAddress { get; set; }
     public Category Category { get; set; }
     
     public string Title { get; set; }

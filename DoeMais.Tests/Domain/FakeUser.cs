@@ -15,10 +15,10 @@ public class FakeUser
     public string Phone { get; set; } = "";
     public Cpf Cpf { get; set; }
     public string PasswordHash { get; set; } = default!;
+    public FakeAddress FakeAddress { get; set; }
     
     public ICollection<FakeUserRole> FakeUserRoles { get; set; } = new List<FakeUserRole>();
     public ICollection<FakeDonation> FakeDonations { get; set; } = new List<FakeDonation>();
-    public ICollection<FakeAddress> FakeAddresses { get; set; } = new List<FakeAddress>();
 
     public static FakeUser Create(long? userId = null)
     {
@@ -31,7 +31,9 @@ public class FakeUser
             .RuleFor(u => u.Email, f => f.Internet.Email())
             .RuleFor(u => u.Phone, f => f.Phone.PhoneNumber())
             .RuleFor(u => u.Cpf, f => new Cpf(ExtensionsForBrazil.Cpf(f.Person, false)))
-            .RuleFor(u => u.PasswordHash, f => f.Internet.Password(60));
+            .RuleFor(u => u.PasswordHash, f => f.Internet.Password(60))
+            .RuleFor(u => u.FakeAddress, f => FakeAddress.Create());
+        
 
         var fakeUser = faker.Generate();
         
@@ -41,13 +43,6 @@ public class FakeUser
         };
         
         fakeUser.FakeUserRoles = fakeRoles;
-
-        var fakeAddresses = new List<FakeAddress>
-        {
-            FakeAddress.Create()
-        };
-        fakeUser.FakeAddresses = fakeAddresses;
-        
         var fakeDonations = new List<FakeDonation>
         {
             FakeDonation.Create()
@@ -57,20 +52,9 @@ public class FakeUser
         return fakeUser;
     }
     
-    public FakeUser WithAddress(FakeAddress? address = null)
-    {
-        address ??= FakeAddress.Create();
-        FakeAddresses.Add(address);
-        return this;
-    }
-
     public FakeUser WithDonation(FakeDonation? donation = null)
     {
-        if (FakeAddresses.Count == 0)
-            WithAddress();
-
-        var addressId = FakeAddresses.First().AddressId;
-        donation ??= FakeDonation.Create(UserId, addressId);
+        donation ??= FakeDonation.Create(UserId);
 
         FakeDonations.Add(donation);
         return this;

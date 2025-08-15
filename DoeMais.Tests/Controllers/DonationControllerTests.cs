@@ -1,11 +1,8 @@
 using System.Security.Claims;
 using DoeMais.Common;
-using DoeMais.Controllers.Address;
 using DoeMais.Controllers.Donation;
 using DoeMais.Domain.Enums;
-using DoeMais.DTOs.Address;
 using DoeMais.DTOs.Donation;
-using DoeMais.Extensions;
 using DoeMais.Services.Interfaces;
 using DoeMais.Tests.Domain;
 using DoeMais.Tests.Extensions;
@@ -78,7 +75,7 @@ public class DonationControllerTests
     [Test]
     public async Task GetDonationList_ShouldReturnDonation_WhenDonationsExist()
     {
-        var donations = FakeDonation.CreateMany(3).Select(d => d.ToDto()).ToList();
+        var donations = FakeDonation.CreateMany(3).Select(d => d.WithAddress().ToDto()).ToList();
         _donationServiceMock.Setup(s => s.GetDonationListAsync())
             .ReturnsAsync(new Result<List<DonationDto>>(ResultType.Success, donations));
         

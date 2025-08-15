@@ -7,9 +7,8 @@ public class FakeDonation
 {
     public long DonationId { get; set; }
     public long UserId { get; set; }
-    public long AddressId { get; set; }
-    
-    public FakeAddress FakeAddress { get; set; }
+    public FakeAddress FakePickupAddress { get; set; }
+    public FakeAddress FakeDeliveryAddress { get; set; }
     public string Title { get; set; } = "";
     public string Description { get; set; } = "";
     public int? Quantity { get; set; }
@@ -18,12 +17,11 @@ public class FakeDonation
     
     public ICollection<string> Images { get; set; } = new List<string>();
 
-    public static FakeDonation Create(long? userId = null, long? addressId = null)
+    public static FakeDonation Create(long? userId = null)
     {
         var faker = new Faker<FakeDonation>("pt_BR")
             .RuleFor(d => d.DonationId, f => f.IndexGlobal + 1)
             .RuleFor(d => d.UserId, _ => userId ?? 1)
-            .RuleFor(d => d.AddressId, f => addressId ?? 1)
             .RuleFor(d => d.Title, f => f.Commerce.ProductName())
             .RuleFor(d => d.Description, f => f.Lorem.Sentence())
             .RuleFor(d => d.Quantity, f => f.Random.Int(1, 10))
@@ -38,12 +36,11 @@ public class FakeDonation
         return faker.Generate();
     } 
     
-    public static List<FakeDonation> CreateMany(long? userId = null, long? addressId = null, int qty = 2)
+    public static List<FakeDonation> CreateMany(long? userId = null, int qty = 2)
     {
         var faker = new Faker<FakeDonation>("pt_BR")
             .RuleFor(d => d.DonationId, f => f.IndexGlobal + 1)
             .RuleFor(d => d.UserId, _ => userId ?? 1)
-            .RuleFor(d => d.AddressId, f => addressId ?? 1)
             .RuleFor(d => d.Title, f => f.Commerce.ProductName())
             .RuleFor(d => d.Description, f => f.Lorem.Sentence())
             .RuleFor(d => d.Quantity, f => f.Random.Int(1, 10))
@@ -58,12 +55,11 @@ public class FakeDonation
         return faker.Generate(qty);
     } 
     
-    public FakeDonation WithAddress(FakeAddress? address = null)
+    public FakeDonation WithAddress(FakeAddress? pickupAddress = null, FakeAddress? deliveryAddress = null)
     {
-        var donationId = this.DonationId;
-        address ??= FakeAddress.Create();
-
-        this.FakeAddress = address;
+        this.FakePickupAddress = pickupAddress ?? FakeAddress.Create();
+        this.FakeDeliveryAddress = deliveryAddress ?? FakeAddress.Create();
+    
         return this;
     }
 }

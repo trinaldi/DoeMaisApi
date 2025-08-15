@@ -10,12 +10,13 @@ public static class CreateDonationDtoExtensions
         return new Donation
         {
             UserId = dto.UserId,
-            AddressId = dto.AddressId,
             Title = dto.Title,
             Description = dto.Description ?? "",
             Quantity = dto.Quantity ?? 1,
             Status = dto.Status,
             Category = dto.Category,
+            PickupAddress = dto.PickupAddress.ToEntity(),
+            DeliveryAddress = dto.DeliveryAddress.ToEntity(),
             Images = dto.Images != null ? new List<string>(dto.Images) : new List<string>()
         };
     }

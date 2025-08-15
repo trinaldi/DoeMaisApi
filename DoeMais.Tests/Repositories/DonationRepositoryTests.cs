@@ -1,11 +1,12 @@
-using DoeMais.Data;
 using DoeMais.Domain.Entities;
 using DoeMais.Extensions;
+using DoeMais.Infrastructure;
 using DoeMais.Repositories;
 using DoeMais.Services.Query;
 using DoeMais.Tests.Domain;
 using DoeMais.Tests.Extensions;
 using DoeMais.Tests.Helpers.Factories;
+using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 
@@ -42,8 +43,7 @@ public class DonationRepositoryTests
         Assert.Multiple(() =>
         {
             Assert.That(result, Is.Not.Null);
-            Assert.That(result?.DonationId, Is.EqualTo(donation.DonationId));
-            Assert.That(result?.UserId, Is.EqualTo(donation.UserId));
+            result.Should().BeEquivalentTo(donation);
         });
 
     }
@@ -186,9 +186,7 @@ public class DonationRepositoryTests
      public async Task DeleteDonationAsync_ShouldNotDeleteOtherAddresses_WhenDeletingSpecificAddress()
      {
          var firstDonation = FakeDonation.Create().WithAddress().ToEntity();
-         firstDonation.Address.AddressId = 1;
          var secondDonation = FakeDonation.Create().WithAddress().ToEntity();
-         firstDonation.Address.AddressId = 2;
          await _repository.CreateDonationAsync(firstDonation);
          await _repository.CreateDonationAsync(secondDonation);
 

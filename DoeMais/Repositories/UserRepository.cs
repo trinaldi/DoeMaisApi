@@ -1,5 +1,5 @@
-using DoeMais.Data;
 using DoeMais.Domain.Entities;
+using DoeMais.Infrastructure;
 using DoeMais.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,7 +17,6 @@ public class UserRepository : IUserRepository
     {
         return await _ctx.Users
             .Include(u => u.Donations)
-            .Include(u => u.Addresses)
             .FirstOrDefaultAsync(u => u.UserId == id);
     }
 

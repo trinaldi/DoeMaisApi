@@ -1,5 +1,4 @@
 using DoeMais.Domain.Entities;
-using DoeMais.Domain.Enums;
 using DoeMais.DTOs.Donation;
 
 namespace DoeMais.Extensions;
@@ -11,13 +10,14 @@ public static class DonationExtensions
         return new DonationDto
         {
             DonationId = donation.DonationId,
-            AddressId = donation.AddressId,
             UserId = donation.UserId,
             Title = donation.Title,
             Description = donation.Description,
             Quantity = donation.Quantity,
             Status = donation.Status,
             Category = donation.Category,
+            PickupAddress = donation.PickupAddress.ToDto(),
+            DeliveryAddress = donation.DeliveryAddress.ToDto(),
             Images = new List<string>(donation.Images)
         };
     } 
@@ -29,9 +29,7 @@ public static class DonationExtensions
         donation.Quantity = dto.Quantity ?? donation.Quantity;
         donation.Status = dto.Status ?? donation.Status;
         donation.Category = dto.Category ?? donation.Category;
-
-        if (dto.AddressId != 0 && dto.AddressId != donation.AddressId)
-            donation.AddressId = dto.AddressId;
+        donation.Images = dto.Images ?? donation.Images;
     }
 
     public static void UpdateFrom(this Donation target, Donation source)
@@ -44,7 +42,7 @@ public static class DonationExtensions
         target.Images = source.Images;
     }
     
-    public static Donation Clone(this Donation? donation)
+    public static Donation? Clone(this Donation? donation)
     {
         if (donation is null)
         {
@@ -54,14 +52,14 @@ public static class DonationExtensions
         return new Donation
         {
             DonationId = donation.DonationId,
-            AddressId = donation.AddressId,
             UserId = donation.UserId,
             Title = donation.Title,
             Description = donation.Description,
             Quantity = donation.Quantity,
             Status = donation.Status,
             Category = donation.Category,
-            Address = donation.Address,
+            PickupAddress = donation.PickupAddress,
+            DeliveryAddress = donation.DeliveryAddress,
             Images = donation.Images,
             User = donation.User
         };
@@ -71,13 +69,14 @@ public static class DonationExtensions
         return new CreateDonationDto
         {
             UserId = donation.UserId,
-            AddressId = donation.AddressId,
             Title = donation.Title,
             Description = donation.Description,
             Quantity = donation.Quantity,
             Status = donation.Status,
             Category = donation.Category,
-            Images = donation.Images?.ToList() ?? new List<string>()
+            PickupAddress = donation.PickupAddress.ToDto(),
+            DeliveryAddress = donation.DeliveryAddress.ToDto(),
+            Images = donation.Images?.ToList() ?? []
         };
     }
 }

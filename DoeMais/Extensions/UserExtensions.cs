@@ -1,5 +1,6 @@
 using DoeMais.DTOs.User;
 using DoeMais.Domain.Entities;
+using DoeMais.Domain.OwnedTypes;
 using DoeMais.DTOs.Address;
 
 namespace DoeMais.Extensions;
@@ -14,19 +15,7 @@ public static class UserExtensions
             AvatarUrl = user.AvatarUrl,
             Name = user.Name,
             Phone = user.Phone,
-            Addresses = user.Addresses
-                .Select(a => new AddressDto
-                {
-                    AddressId = a.AddressId,
-                    Street = a.Street,
-                    Complement = a.Complement,
-                    Neighborhood = a.Neighborhood,
-                    City = a.City,
-                    State = a.State,
-                    ZipCode = a.ZipCode,
-                    IsPrimary = a.IsPrimary
-                })
-                .ToList()
+            AddressDto = user.Address.ToDto()
         };
     }
     
@@ -37,19 +26,7 @@ public static class UserExtensions
             AvatarUrl = user.AvatarUrl,
             Name = user.Name,
             Phone = user.Phone,
-            Addresses = user.Addresses
-                .Select(a => new AddressDto
-                {
-                    AddressId = a.AddressId,
-                    Street = a.Street,
-                    Complement = a.Complement,
-                    Neighborhood = a.Neighborhood,
-                    City = a.City,
-                    State = a.State,
-                    ZipCode = a.ZipCode,
-                    IsPrimary = a.IsPrimary
-                })
-                .ToList()
+            AddressDto = user.Address.ToDto()
             
         };
     }
@@ -59,35 +36,8 @@ public static class UserExtensions
         user.AvatarUrl = dto.AvatarUrl ?? user.AvatarUrl;
         user.Name = dto.Name ?? user.Name;
         user.Phone = dto.Phone ?? user.Phone;
-        
-        var addressDto = dto.Addresses.FirstOrDefault(a => a.IsPrimary);
-        if (addressDto == null) return;
-        
-        var address = user.Addresses.FirstOrDefault(a => a.IsPrimary);
+        user.Address = dto.AddressDto?.ToEntity() ?? user.Address;
 
-        if (address != null)
-        {
-            address.Street = addressDto.Street;
-            address.Complement = addressDto.Complement;
-            address.Neighborhood = addressDto.Neighborhood;
-            address.City = addressDto.City;
-            address.State = addressDto.State;
-            address.ZipCode = addressDto.ZipCode;
-        }
-        else
-        {
-            user.Addresses.Add(new Address
-            {
-                Street = addressDto.Street,
-                Complement = addressDto.Complement,
-                Neighborhood = addressDto.Neighborhood,
-                City = addressDto.City,
-                State = addressDto.State,
-                ZipCode = addressDto.ZipCode,
-                IsPrimary = true,
-                UserId = user.UserId
-            });
-        }
     }
     
     public static User Clone(this User user)
@@ -99,20 +49,7 @@ public static class UserExtensions
             Email = user.Email,
             Phone = user.Phone,
             Cpf = user.Cpf,
-            Addresses = user.Addresses
-                .Select(a => new Address
-                {
-                    AddressId = a.AddressId,
-                    Street = a.Street,
-                    Complement = a.Complement,
-                    Neighborhood = a.Neighborhood,
-                    City = a.City,
-                    State = a.State,
-                    ZipCode = a.ZipCode,
-                    IsPrimary = a.IsPrimary,
-                    UserId = user.UserId
-                })
-                .ToList()
+            Address = user.Address
         };
         
         foreach (var userRole in user.UserRoles)

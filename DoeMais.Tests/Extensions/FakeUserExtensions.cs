@@ -1,4 +1,5 @@
 using DoeMais.Domain.Entities;
+using DoeMais.Domain.OwnedTypes;
 using DoeMais.Domain.ValueObjects;
 using DoeMais.Tests.Domain;
 
@@ -17,16 +18,7 @@ public static class FakeUserExtensions
             Phone = fake.Phone,
             Cpf = fake.Cpf,
             PasswordHash = fake.PasswordHash,
-            Addresses = fake.FakeAddresses
-                .Select(a => new Address
-                {
-                    Street = a.Street,
-                    City = a.City,
-                    State = a.State,
-                    Neighborhood = a.Neighborhood,
-                    ZipCode = a.ZipCode,
-                    IsPrimary = a.IsPrimary
-                }).ToList()
+            Address = fake.FakeAddress.ToEntity()
         };
 
         user.UserRoles = fake.FakeUserRoles

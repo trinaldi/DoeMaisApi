@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DoeMais.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialWithOwnedTypes : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -40,6 +40,13 @@ namespace DoeMais.Migrations
                     Email = table.Column<string>(type: "text", nullable: false),
                     Phone = table.Column<string>(type: "text", nullable: false),
                     Cpf = table.Column<string>(type: "character varying(11)", maxLength: 11, nullable: false),
+                    Address_Street = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
+                    Address_Complement = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    Address_Neighborhood = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    Address_City = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    Address_State = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    Address_ZipCode = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
+                    Address_IsPrimary = table.Column<bool>(type: "boolean", nullable: false),
                     PasswordHash = table.Column<string>(type: "text", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
@@ -50,27 +57,40 @@ namespace DoeMais.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Addresses",
+                name: "Donations",
                 columns: table => new
                 {
-                    AddressId = table.Column<long>(type: "bigint", nullable: false)
+                    DonationId = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     UserId = table.Column<long>(type: "bigint", nullable: false),
-                    Street = table.Column<string>(type: "text", nullable: true),
-                    Complement = table.Column<string>(type: "text", nullable: true),
-                    Neighborhood = table.Column<string>(type: "text", nullable: true),
-                    City = table.Column<string>(type: "text", nullable: true),
-                    State = table.Column<string>(type: "text", nullable: true),
-                    ZipCode = table.Column<string>(type: "text", nullable: true),
-                    IsPrimary = table.Column<bool>(type: "boolean", nullable: false),
+                    PickupAddress_Street = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
+                    PickupAddress_Complement = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    PickupAddress_Neighborhood = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    PickupAddress_City = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    PickupAddress_State = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    PickupAddress_ZipCode = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
+                    PickupAddress_IsPrimary = table.Column<bool>(type: "boolean", nullable: false),
+                    DeliveryAddress_Street = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
+                    DeliveryAddress_Complement = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    DeliveryAddress_Neighborhood = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    DeliveryAddress_City = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    DeliveryAddress_State = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    DeliveryAddress_ZipCode = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
+                    DeliveryAddress_IsPrimary = table.Column<bool>(type: "boolean", nullable: false),
+                    Category = table.Column<string>(type: "text", nullable: false),
+                    Title = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    Quantity = table.Column<int>(type: "integer", nullable: true),
+                    Status = table.Column<int>(type: "integer", nullable: false),
+                    Images = table.Column<string[]>(type: "text[]", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Addresses", x => x.AddressId);
+                    table.PrimaryKey("PK_Donations", x => x.DonationId);
                     table.ForeignKey(
-                        name: "FK_Addresses_Users_UserId",
+                        name: "FK_Donations_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "UserId",
@@ -103,40 +123,6 @@ namespace DoeMais.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Donations",
-                columns: table => new
-                {
-                    DonationId = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    UserId = table.Column<long>(type: "bigint", nullable: false),
-                    AddressId = table.Column<long>(type: "bigint", nullable: false),
-                    Category = table.Column<string>(type: "text", nullable: false),
-                    Title = table.Column<string>(type: "text", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: true),
-                    Quantity = table.Column<int>(type: "integer", nullable: true),
-                    Status = table.Column<int>(type: "integer", nullable: false),
-                    Images = table.Column<string[]>(type: "text[]", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Donations", x => x.DonationId);
-                    table.ForeignKey(
-                        name: "FK_Donations_Addresses_AddressId",
-                        column: x => x.AddressId,
-                        principalTable: "Addresses",
-                        principalColumn: "AddressId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Donations_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "UserId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.InsertData(
                 table: "Roles",
                 columns: new[] { "RoleId", "CreatedAt", "Name", "UpdatedAt" },
@@ -146,16 +132,6 @@ namespace DoeMais.Migrations
                     { 2L, new DateTime(2025, 7, 30, 0, 0, 0, 0, DateTimeKind.Utc), "Donor", new DateTime(2025, 7, 30, 0, 0, 0, 0, DateTimeKind.Utc) },
                     { 3L, new DateTime(2025, 7, 30, 0, 0, 0, 0, DateTimeKind.Utc), "Charity", new DateTime(2025, 7, 30, 0, 0, 0, 0, DateTimeKind.Utc) }
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Addresses_UserId",
-                table: "Addresses",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Donations_AddressId",
-                table: "Donations",
-                column: "AddressId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Donations_UserId",
@@ -176,9 +152,6 @@ namespace DoeMais.Migrations
 
             migrationBuilder.DropTable(
                 name: "UserRoles");
-
-            migrationBuilder.DropTable(
-                name: "Addresses");
 
             migrationBuilder.DropTable(
                 name: "Roles");

@@ -17,8 +17,8 @@ public record UserProfileDto
     [RegularExpression(@"^\d{11}$", ErrorMessage = "Phone number must be exactly 11 digits, e.g. 99999999999.")]
     public string Phone { get; init; } = "";
 
-    public ICollection<AddressDto> Addresses { get; init; } = [];
+    public AddressDto? AddressDto { get; set; }
     
     public override string ToString() => 
-        $"AvatarUrl: {AvatarUrl}, Name: {Name}, Phone: {Phone}, Addresses: {Addresses?.Count ?? 0}";
+        $"AvatarUrl: {AvatarUrl}, Name: {Name}, Phone: {Phone}, Address: {AddressDto}";
 }
