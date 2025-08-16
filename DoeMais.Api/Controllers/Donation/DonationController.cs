@@ -104,10 +104,10 @@ public class DonationController : ControllerBase
     }
 
     [Authorize]
-    [HttpGet]
-    public async Task<IActionResult> GetDonationsByCategory([FromQuery] int category)
+    [HttpGet("category")]
+    public async Task<IActionResult> GetDonationsByCategory([FromQuery] int categoryId)
     {
-        var result = await _donationService.GetDonationsByCategoryAsync(category);
+        var result = await _donationService.GetDonationsByCategoryAsync(categoryId);
         
         return result.Type switch
         {

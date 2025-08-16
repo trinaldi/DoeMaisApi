@@ -5,6 +5,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
       <UserSecretsId>b289b683-5679-4d97-8491-a89b0007070f</UserSecretsId>
+      <RootNamespace>DoeMais</RootNamespace>
   </PropertyGroup>
 
     <ItemGroup>
