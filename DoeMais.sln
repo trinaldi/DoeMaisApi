@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# 
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoeMais", "DoeMais\DoeMais.csproj", "{FEDEE953-473D-4457-83F3-D527C87150C9}"
+#
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoeMais.Api", "DoeMais.Api\DoeMais.Api.csproj", "{FEDEE953-473D-4457-83F3-D527C87150C9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoeMais.Tests", "DoeMais.Tests\DoeMais.Tests.csproj", "{87ACB733-5F95-41E4-AAFD-ABFBA5E8F8F6}"
 EndProject
