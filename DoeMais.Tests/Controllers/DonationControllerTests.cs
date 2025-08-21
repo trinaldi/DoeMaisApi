@@ -247,7 +247,7 @@ public class DonationControllerTests
         const int categoryInt = (int)category;
         var donations = FakeDonation.CreateMany(qty: 3)
             .Select(d => d.WithAddress().ToDto()).ToList();
-        donations.ForEach(d => d.Category = category);
+        donations.ForEach(d => d.Category = category.ToString());
         _donationServiceMock.Setup(s => s.GetDonationsByCategoryAsync(categoryInt))
             .ReturnsAsync(new Result<List<DonationDto>>(ResultType.Success, donations));
         

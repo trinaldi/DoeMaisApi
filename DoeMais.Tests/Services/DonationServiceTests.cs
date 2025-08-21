@@ -106,7 +106,7 @@ public class DonationServiceTests
             Assert.That(result!.Data!.Title, Is.EqualTo(createDonationDto.Title));
             Assert.That(result!.Data!.Description, Is.EqualTo(createDonationDto.Description));
             Assert.That(result!.Data!.Quantity, Is.EqualTo(createDonationDto.Quantity));
-            Assert.That(result!.Data!.Status, Is.EqualTo(createDonationDto.Status));
+            Assert.That(result!.Data!.Status.ToString(), Is.EqualTo(createDonationDto.Status.ToString()));
             Assert.That(result!.Data!.Images, Is.EquivalentTo(createDonationDto.Images ?? new List<string>()));
         });
     }
@@ -212,7 +212,7 @@ public class DonationServiceTests
         Assert.Multiple(() =>
         {
             Assert.That(result, Is.Not.Null);
-            Assert.That(result!.Data!.All(d => d.Category == category));
+            Assert.That(result!.Data!.All(d => d.Category == category.ToString()));
         });
     }
     

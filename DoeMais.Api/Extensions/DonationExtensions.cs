@@ -14,8 +14,8 @@ public static class DonationExtensions
             Title = donation.Title,
             Description = donation.Description,
             Quantity = donation.Quantity,
-            Status = donation.Status,
-            Category = donation.Category,
+            Status = donation.Status.ToString(),
+            Category = donation.Category.ToString(),
             PickupAddress = donation.PickupAddress.ToDto(),
             DeliveryAddress = donation.DeliveryAddress.ToDto(),
             Images = new List<string>(donation.Images)

@@ -32,8 +32,8 @@ public static class FakeDonationExtensions
             Title = fakeDonation.Title,
             Description = fakeDonation.Description,
             Quantity = fakeDonation.Quantity,
-            Status = fakeDonation.Status,
-            Category = fakeDonation.Category,
+            Status = fakeDonation.Status.ToString(),
+            Category = fakeDonation.Category.ToString(),
             PickupAddress = fakeDonation.FakePickupAddress.ToDto(),
             DeliveryAddress = fakeDonation.FakeDeliveryAddress.ToDto(),
             Images = fakeDonation.Images

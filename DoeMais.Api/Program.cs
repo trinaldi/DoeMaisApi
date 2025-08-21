@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Text.Json;
 using DoeMais.Authorization.Handlers;
 using DoeMais.Authorization.Requirements;
 using DoeMais.Infrastructure;
@@ -76,7 +77,11 @@ builder.Services.AddAuthentication();
 builder.Services.AddAuthorizationBuilder()
     .AddPolicy("OwnerOrAdmin", policy => policy.Requirements.Add(new OwnerOrAdminRequirement()));
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+    });
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<UserIdSaveChangesInterceptor>();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
